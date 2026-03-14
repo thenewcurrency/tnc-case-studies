@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calvin Klein — The Raf Simons Era | Alex Wagner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f7f5f0;
+    --off-white: #ede9e2;
+    --gray: #6b6b6b;
+    --accent: #c8b89a;
+    --accent-dark: #8a6a4a;
+    --deep: #0e0c0a;
+    --rule: rgba(255,255,255,0.07);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ──────────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 55% 45%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    background: var(--black);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 80px 64px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-right {
+    background: #111;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 80px 60px;
+  }
+
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px),
+      repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px);
+    z-index: 0;
+  }
+
+  .hero-right-content { position: relative; z-index: 1; }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 9vw, 128px);
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    color: var(--white);
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.35s forwards;
+  }
+
+  .hero-title .dim { color: rgba(247,245,240,0.22); }
+  .hero-title .gold { color: var(--accent); }
+
+  .hero-sub {
+    font-size: 13px;
+    color: var(--gray);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 28px;
+    max-width: 520px;
+    line-height: 1.8;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.55s forwards;
+  }
+
+  .rule { width: 100%; height: 1px; background: linear-gradient(90deg, var(--accent), transparent); margin: 36px 0; }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.75s forwards;
+  }
+
+  .stat-box { border-top: 1px solid rgba(255,255,255,0.09); padding-top: 14px; }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 38px; color: var(--accent); line-height: 1; }
+  .stat-label { font-size: 10px; color: var(--gray); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 4px; }
+
+  /* Right column landmark list */
+  .landmark-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.9s forwards;
+  }
+
+  .lm-item {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 20px;
+    align-items: start;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .lm-item:first-child { border-top: 1px solid var(--rule); }
+
+  .lm-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    padding-top: 2px;
+  }
+
+  .lm-text {
+    font-size: 13px;
+    color: rgba(247,245,240,0.55);
+    line-height: 1.6;
+  }
+
+  .lm-text strong { color: rgba(247,245,240,0.85); font-weight: 400; }
+
+  /* ── VISUAL BREAK ──────────────────────────────── */
+  .vbreak { height: 3px; background: linear-gradient(90deg, var(--accent) 0%, transparent 50%); }
+
+  /* ── ROLE BANNER ───────────────────────────────── */
+  .role-banner {
+    background: #0e0e0e;
+    border-top: 1px solid rgba(200,184,154,0.18);
+    border-bottom: 1px solid rgba(200,184,154,0.18);
+    padding: 52px 0;
+  }
+
+  .role-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 64px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  .role-id { border-left: 3px solid var(--accent); padding-left: 28px; }
+  .ri-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  .ri-name { font-family: 'Bebas Neue', sans-serif; font-size: 44px; line-height: 1; }
+  .ri-title { font-size: 13px; color: var(--gray); margin-top: 6px; }
+
+  .role-meta { display: grid; grid-template-columns: repeat(3, 1fr); }
+
+  .rm-cell { padding: 0 36px; border-left: 1px solid var(--rule); }
+  .rm-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray); margin-bottom: 8px; }
+  .rm-value { font-size: 14px; color: rgba(247,245,240,0.72); line-height: 1.6; }
+
+  /* ── OVERVIEW STRIP ────────────────────────────── */
+  .overview-strip { background: var(--off-white); padding: 72px 0; }
+  .overview-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 64px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1px solid #d4d0c9;
+  }
+
+  .ov-cell { padding: 36px 32px; border-right: 1px solid #d4d0c9; }
+  .ov-cell:last-child { border-right: none; }
+  .ov-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #888; margin-bottom: 10px; }
+  .ov-value { font-size: 15px; color: #1a1a1a; line-height: 1.5; }
+
+  /* ── SECTIONS ──────────────────────────────────── */
+  .section { padding: 96px 0; }
+  .section-inner { max-width: 1200px; margin: 0 auto; padding: 0 64px; }
+  .s-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
+  .s-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 5vw, 68px); line-height: 1; letter-spacing: -0.01em; margin-bottom: 32px; }
+  .body { font-size: 16px; line-height: 1.78; color: rgba(247,245,240,0.72); max-width: 680px; }
+  .body + .body { margin-top: 20px; }
+
+  /* ── TIMELINE ──────────────────────────────────── */
+  .tl-section { background: #0d0d0d; }
+
+  .timeline { position: relative; margin-top: 56px; }
+  .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: linear-gradient(180deg, var(--accent) 0%, rgba(200,184,154,0.1) 100%); }
+
+  .tl-item { display: grid; grid-template-columns: 148px 1fr; gap: 40px; margin-bottom: 56px; padding-left: 28px; position: relative; }
+  .tl-item::before { content: ''; position: absolute; left: -4px; top: 7px; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d0d; }
+
+  .tl-date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.1em; padding-top: 3px; }
+  .tl-content h4 { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 0.03em; margin-bottom: 10px; }
+  .tl-content p { font-size: 14px; color: rgba(247,245,240,0.6); line-height: 1.75; max-width: 620px; }
+
+  /* ── PULL QUOTE ────────────────────────────────── */
+  .pq-section { background: var(--off-white); padding: 96px 0; }
+  .pq-inner { max-width: 1200px; margin: 0 auto; padding: 0 64px; display: grid; grid-template-columns: 1fr 2.2fr; gap: 80px; align-items: center; }
+  .pq-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #888; }
+  .pq-text { font-family: 'Bebas Neue', sans-serif; font-size: clamp(30px, 3.8vw, 52px); line-height: 1.06; color: #1a1a1a; }
+  .pq-text em { color: var(--accent-dark); font-style: normal; }
+
+  /* ── PILLARS GRID ──────────────────────────────── */
+  .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); margin-top: 56px; }
+
+  .pillar { background: #0f0f0f; padding: 44px 38px; position: relative; overflow: hidden; transition: background 0.3s; }
+  .pillar:hover { background: #141414; }
+  .pillar::before { content: attr(data-n); font-family: 'Bebas Neue', sans-serif; font-size: 110px; color: rgba(200,184,154,0.05); position: absolute; top: -8px; right: 16px; line-height: 1; pointer-events: none; }
+
+  .pillar-icon { font-size: 22px; margin-bottom: 18px; }
+  .pillar-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 0.03em; margin-bottom: 12px; }
+  .pillar-body { font-size: 13.5px; color: rgba(247,245,240,0.58); line-height: 1.72; }
+  .pillar-tag { display: inline-block; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); border: 1px solid rgba(200,184,154,0.28); padding: 4px 10px; margin-top: 18px; }
+
+  /* ── MILESTONE CARDS ───────────────────────────── */
+  .milestone-section { background: #0a0a0a; }
+
+  .milestone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--rule); margin-top: 56px; }
+
+  .mc { background: var(--black); padding: 44px 40px; transition: background 0.3s; }
+  .mc:hover { background: #0d0d0d; }
+
+  .mc-date { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+  .mc-title { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 0.02em; margin-bottom: 14px; line-height: 1; }
+  .mc-body { font-size: 14px; color: rgba(247,245,240,0.58); line-height: 1.75; }
+  .mc-body + .mc-body { margin-top: 12px; }
+
+  /* ── CAMPAIGN SECTION ──────────────────────────── */
+  .campaign-section { background: #111; }
+
+  .campaign-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--rule); margin-top: 56px; }
+
+  .cg { background: #0f0f0f; padding: 40px 36px; }
+  .cg-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+  .cg-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 0.03em; margin-bottom: 12px; }
+  .cg-body { font-size: 13.5px; color: rgba(247,245,240,0.55); line-height: 1.72; }
+
+  /* ── RESULTS ───────────────────────────────────── */
+  .results-section { background: var(--off-white); }
+
+  .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid #d4d0c9; margin-top: 56px; }
+  .rc { padding: 44px 36px; border-right: 1px solid #d4d0c9; }
+  .rc:last-child { border-right: none; }
+  .rc::after { content: ''; display: block; width: 36px; height: 2px; background: #1a1a1a; margin-top: 22px; }
+  .rc-num { font-family: 'Bebas Neue', sans-serif; font-size: 58px; line-height: 1; color: #1a1a1a; }
+  .rc-label { font-size: 13px; color: #777; margin-top: 8px; line-height: 1.5; }
+
+  .results-note { margin-top: 44px; padding: 32px 40px; background: var(--black); font-size: 14px; line-height: 1.75; color: rgba(247,245,240,0.65); border-left: 3px solid var(--accent); }
+
+  /* ── LESSONS ───────────────────────────────────── */
+  .lessons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 56px; background: var(--rule); }
+  .lesson { background: var(--black); padding: 44px 40px; transition: background 0.3s; }
+  .lesson:hover { background: #0d0d0d; }
+  .lesson-n { font-family: 'Bebas Neue', sans-serif; font-size: 72px; color: rgba(200,184,154,0.1); line-height: 1; margin-bottom: -8px; }
+  .lesson-title { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 0.02em; margin-bottom: 12px; }
+  .lesson-body { font-size: 14px; color: rgba(247,245,240,0.58); line-height: 1.75; }
+
+  /* ── BLOCKQUOTE ────────────────────────────────── */
+  blockquote.fq { border-left: 3px solid var(--accent); padding: 0 0 0 26px; font-style: italic; font-size: 17px; color: rgba(247,245,240,0.62); line-height: 1.75; margin: 32px 0; }
+  blockquote.fq cite { display: block; font-style: normal; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-top: 10px; }
+
+  blockquote.fq-dark { border-left: 3px solid var(--accent-dark); padding: 0 0 0 26px; font-style: italic; font-size: 17px; color: rgba(26,26,26,0.65); line-height: 1.75; margin: 32px 0; }
+  blockquote.fq-dark cite { display: block; font-style: normal; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent-dark); margin-top: 10px; }
+
+  /* ── FOOTER ────────────────────────────────────── */
+  footer { background: var(--black); border-top: 1px solid var(--rule); padding: 60px 64px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .footer-l { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 0.1em; color: rgba(247,245,240,0.12); }
+  .footer-r { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray); letter-spacing: 0.15em; text-align: right; line-height: 1.8; }
+
+  /* ── ANIMATIONS ────────────────────────────────── */
+  @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+  .fi { opacity:0; transform:translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .fi.visible { opacity:1; transform:translateY(0); }
+
+  /* ── RESPONSIVE ────────────────────────────────── */
+  @media (max-width: 960px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hero-left { padding: 60px 32px; }
+    .hero-stats { grid-template-columns: 1fr 1fr; }
+    .section-inner, .role-inner, .pq-inner { padding: 0 32px; }
+    .overview-grid { grid-template-columns: 1fr 1fr; }
+    .ov-cell { border-bottom: 1px solid #d4d0c9; }
+    .pillars, .campaign-grid { grid-template-columns: 1fr; }
+    .milestone-grid, .lessons-grid { grid-template-columns: 1fr; }
+    .results-grid { grid-template-columns: 1fr; }
+    .role-inner { grid-template-columns: 1fr; gap: 40px; }
+    .role-meta { grid-template-columns: 1fr; gap: 20px; }
+    .rm-cell { border-left: none; border-top: 1px solid var(--rule); padding: 16px 0 0; }
+    .pq-inner { grid-template-columns: 1fr; gap: 20px; }
+    footer { flex-direction: column; gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════
+     HERO
+════════════════════════════ -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="eyebrow">Brand Transformation Case Study · Calvin Klein · 2016–2018</div>
+    <div class="hero-title">
+      THE<br>
+      <span class="gold">RAF</span><br>
+      <span class="dim">SIMONS</span><br>
+      ERA
+    </div>
+    <div class="hero-sub">
+      Leading communications through the most significant creative transformation in Calvin Klein's modern history
+    </div>
+    <div class="rule"></div>
+    <div class="hero-stats">
+      <div class="stat-box">
+        <div class="stat-num">CFDA×2</div>
+        <div class="stat-label">Designer of Year — Women's &amp; Men's, 2017</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">$8B</div>
+        <div class="stat-label">Global CK brand sales under unified creative vision</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">Feb 10</div>
+        <div class="stat-label">NYFW debut — hottest ticket of the season</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">+9%</div>
+        <div class="stat-label">Projected brand revenue growth, FY 2017</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-right-content">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(247,245,240,0.2);letter-spacing:0.25em;text-transform:uppercase;margin-bottom:28px;">Landmark Moments</div>
+      <div class="landmark-list">
+        <div class="lm-item">
+          <div class="lm-date">Aug 2016</div>
+          <div class="lm-text"><strong>Raf Simons named CCO</strong> — first unified creative vision in the brand's history. Replaces Francisco Costa &amp; Italo Zucchelli.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-date">Jan 2017</div>
+          <div class="lm-text"><strong>Calvin Klein By Appointment drops</strong> — surprise social launch of 14-look bespoke line. Atelier opens to the public for the first time.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-date">Feb 10, '17</div>
+          <div class="lm-text"><strong>NYFW debut runway show</strong> — most anticipated show of the season. Front row: Paltrow, Moore, SJP, Millie Bobby Brown. Kaia Gerber's first runway walk.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-date">May 2017</div>
+          <div class="lm-text"><strong>CK By Appointment at the Met Gala</strong> — Julianne Moore and Gwyneth Paltrow wear the collection one month after launch.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-date">Jun 2017</div>
+          <div class="lm-text"><strong>CFDA double win</strong> — Womenswear and Menswear Designer of the Year. Simons wins Womenswear again in 2018.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-date">Sep 2017</div>
+          <div class="lm-text"><strong>205W39NYC SS18 runway</strong> — second major collection builds on Warhol Foundation collaboration, Sterling Ruby installations.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     ROLE BANNER
+════════════════════════════ -->
+<div class="vbreak"></div>
+
+<section class="role-banner">
+  <div class="role-inner">
+    <div class="role-id">
+      <div class="ri-label">Case Study Author &amp; Communications Leader</div>
+      <div class="ri-name">Alex Wagner</div>
+      <div class="ri-title">Senior Communications Leader, Calvin Klein</div>
+    </div>
+    <div class="role-meta">
+      <div class="rm-cell">
+        <div class="rm-label">Scope of Work</div>
+        <div class="rm-value">Global communications strategy, talent strategy &amp; management, messaging development (creative + corporate), earned media, executive narrative, brand transformation</div>
+      </div>
+      <div class="rm-cell">
+        <div class="rm-label">Key Initiatives</div>
+        <div class="rm-value">Raf Simons appointment &amp; onboarding; return of runway; launch of CK By Appointment atelier; 205W39NYC global rollout; all creative campaigns under Simons' direction</div>
+      </div>
+      <div class="rm-cell">
+        <div class="rm-label">Scale</div>
+        <div class="rm-value">$8B global brand across underwear, denim, fragrance, ready-to-wear, home — unified under a single creative vision for the first time in brand history</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     OVERVIEW
+════════════════════════════ -->
+<section class="overview-strip">
+  <div class="overview-grid">
+    <div class="ov-cell">
+      <div class="ov-label">Brand</div>
+      <div class="ov-value">Calvin Klein (PVH Corp.)</div>
+    </div>
+    <div class="ov-cell">
+      <div class="ov-label">Era</div>
+      <div class="ov-value">August 2016 — 2018</div>
+    </div>
+    <div class="ov-cell">
+      <div class="ov-label">Creative Director</div>
+      <div class="ov-value">Raf Simons, Chief Creative Officer</div>
+    </div>
+    <div class="ov-cell">
+      <div class="ov-label">Scope</div>
+      <div class="ov-value">Global brand transformation, luxury RTW, bespoke atelier, global campaigns</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     THE BRIEF
+════════════════════════════ -->
+<section class="section">
+  <div class="section-inner">
+    <div class="s-label fi">01 — The Brief</div>
+    <h2 class="s-title fi">A once-in-a-generation<br>brand transformation</h2>
+    <p class="body fi">Calvin Klein in 2016 was a $3.1 billion business generating $8 billion in global branded sales — healthy by most measures, with a dominant position in underwear, denim, and fragrance. But its parent company PVH had watched competitors like Gucci explode after radical creative overhauls, and saw an opportunity to do the same: reunify all of Calvin Klein's creative output under a single visionary and elevate the brand's cultural standing globally.</p>
+    <p class="body fi">The vehicle for that ambition was Raf Simons — coming off a celebrated tenure at Christian Dior, widely regarded as one of the most intellectually rigorous designers working in fashion. In August 2016, he was named Calvin Klein's first-ever Chief Creative Officer, with complete creative authority over every brand category, from $20 briefs sold at Macy's to made-to-measure gowns crafted in the company's Midtown Manhattan atelier.</p>
+    <p class="body fi">My role was to build and lead the communications strategy that made this transformation legible — to the press, to consumers, to the industry, to retail partners, and to the internal organization simultaneously navigating one of the most significant transitions in its history. That last dimension was foundational: I had built Calvin Klein's first-ever dedicated internal communications function from scratch, giving the organization a coherent internal voice for the first time. Without that function already operational, the Simons transition would have had no reliable mechanism for holding the organization together while the external transformation played out.</p>
+    <blockquote class="fq fi">
+      "The news of his appointment alone injected some much-needed life into New York Fashion Week practically as soon as it broke."
+      <cite>— Vogue</cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     TIMELINE
+════════════════════════════ -->
+<section class="section tl-section">
+  <div class="section-inner">
+    <div class="s-label fi">02 — The Work, Moment by Moment</div>
+    <h2 class="s-title fi">Every milestone,<br>every communications challenge</h2>
+
+    <div class="timeline fi">
+
+      <div class="tl-item">
+        <div class="tl-date">Apr–Aug 2016</div>
+        <div class="tl-content">
+          <h4>The Appointment — Structuring a Historic Announcement</h4>
+          <p>Before Simons could make his first collection, the announcement itself had to be managed with precision. In April 2016, Calvin Klein announced the departure of Francisco Costa (women's) and Italo Zucchelli (men's), the two creative directors who had held the brand's design identity for over a decade. Managing those departures with care and dignity — while building anticipation for what was coming — required communications discipline at every level. When Simons was confirmed in August, my work was to architect the global press announcement, develop the narrative positioning that framed this as evolution rather than disruption, and brief media internationally in a way that honored the brand's past while generating genuine excitement about its future.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">Sep–Dec 2016</div>
+        <div class="tl-content">
+          <h4>Onboarding a New Creative Vision — Internal and External</h4>
+          <p>Simons arrived with a total mandate: new logo (designed with Peter Saville), new brand name (Calvin Klein 205W39NYC, referencing the corporate HQ address on West 39th Street), new showrooms in New York and Paris redesigned by artist Sterling Ruby, and a new set of creative collaborators — including Ruby and the Andy Warhol Foundation — that signaled a fundamentally different brand aesthetic. My work during this period was two-directional: externally, managing the drip of news and narrative around these changes in a way that built coherent anticipation for the February runway debut; internally, aligning the communications organization around the new brand vision and ensuring every touchpoint was consistent with what Simons was building.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">Jan 22, 2017</div>
+        <div class="tl-content">
+          <h4>Calvin Klein By Appointment — A Surprise Drop That Sent a Signal</h4>
+          <p>Simons' first major public act as CCO was a masterclass in communications strategy: a surprise social drop of Calvin Klein By Appointment 1-14 — a 14-look made-to-measure collection released with no advance warning, shot by Willy Vanderperre and styled by Olivier Rizzo, starring Millie Bobby Brown and others, each look juxtaposed against a pair of classic white briefs. The brand's celebrity-only atelier was being opened to the public for the first time; the briefs-beside-couture juxtaposition declared that Calvin Klein was about far more than its waistband. I led the communications strategy — the media briefing, the press narrative, the talent coordination, and the retail and trade communications that contextualized this new pillar for buyers and industry partners.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">Feb 10, 2017</div>
+        <div class="tl-content">
+          <h4>The NYFW Debut — The Most Anticipated Show of the Season</h4>
+          <p>Raf Simons' Calvin Klein debut at 205 West 39th Street — the brand's own headquarters, a deliberate choice — was the defining communications moment of New York Fashion Week that season. Vogue noted the announcement alone had injected new life into NYFW. Kaia Gerber made her runway debut. The front row included Gwyneth Paltrow, Julianne Moore, Sarah Jessica Parker, and Millie Bobby Brown. The collection — American quilts, denim, plastic coats, steel-toed western boots, staged inside a Sterling Ruby installation — was praised across fashion press from WWD to Vogue to The Cut. Managing the press strategy around this moment was among the highest-profile communications work of my career.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">Feb–Apr 2017</div>
+        <div class="tl-content">
+          <h4>American Classics Campaign — Bridging Fashion and Mass Media</h4>
+          <p>Simons' first advertising campaign — "American Classics" — placed Calvin Klein's signature white briefs and dark denim in conversation with works by Andy Warhol, Richard Prince, Sterling Ruby, and Dan Flavin. Shot by Vanderperre, it was critically celebrated as one of the most intellectually rigorous fashion advertising campaigns in recent memory. My communications challenge was a dual-audience press strategy: fashion and culture press engaging with the artistic ambition, consumer and retail media understanding this as an evolution of the brand they already knew, not a departure from it.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">Apr–May 2017</div>
+        <div class="tl-content">
+          <h4>By Appointment Atelier Opens — and the Met Gala Validates It</h4>
+          <p>On April 1, 2017, the Calvin Klein By Appointment atelier opened its doors to the public — the first time private clients beyond the celebrity and VIP tier could book made-to-measure appointments directly with the brand. The communications strategy positioned it as the democratization of something previously inaccessible. The validation came swiftly: one month later, both Julianne Moore and Gwyneth Paltrow wore Calvin Klein By Appointment to the Met Gala — fashion's highest-profile red carpet moment — a placement that was the result of deliberate celebrity communications strategy built over the preceding months, not happenstance.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">Jun 2017</div>
+        <div class="tl-content">
+          <h4>CFDA Double Win — Womenswear and Menswear Designer of the Year</h4>
+          <p>At the 2017 CFDA Fashion Awards, Raf Simons won both Womenswear and Menswear Designer of the Year — a rare double recognition, and a formal validation from the American fashion industry of the creative transformation underway at Calvin Klein. The communications work extended the reinvention narrative into a new register: an American institution honoring a European visionary for making an American brand urgent again. Simons won Womenswear again at the 2018 CFDAs.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">Sep 2017</div>
+        <div class="tl-content">
+          <h4>205W39NYC SS18 — The Second Act and the Warhol Foundation Deepens</h4>
+          <p>The second 205W39NYC runway show deepened the creative vision established in February. Warhol Foundation-provided prints appeared across tees, denim, and full looks. Sterling Ruby's ceiling installations — suspended axes and brightly colored pompoms — brought the "American horror and beauty" theme to life in the physical show environment. The show reinforced that the Simons era at Calvin Klein was not a one-season moment but a sustained, coherent creative and cultural program. My communications work for this collection built on the relationships and press infrastructure established around the debut, while developing the brand's Warhol Foundation partnership into a standalone narrative thread that generated significant cultural press beyond the fashion trade.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     PULL QUOTE
+════════════════════════════ -->
+<section class="pq-section">
+  <div class="pq-inner">
+    <div class="pq-label">The Strategic Challenge</div>
+    <div class="pq-text">
+      Making a $20 pair of briefs and a<br>
+      <em>made-to-measure gown feel like they belong to the same brand story.</em>
+      That is a communications problem.
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     MY WORK — PILLARS
+════════════════════════════ -->
+<section class="section">
+  <div class="section-inner">
+    <div class="s-label fi">03 — The Communications Architecture</div>
+    <h2 class="s-title fi">Six disciplines,<br>one transformation</h2>
+    <div class="pillars fi">
+
+      <div class="pillar" data-n="1">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Executive Transition Communications</div>
+        <div class="pillar-body">The departure of Costa and Zucchelli and the arrival of Simons required simultaneous communications management on two fronts: honoring the outgoing directors' legacy without dampening momentum for what was coming, and building genuine excitement for Simons without overpromising. Getting that balance right required precision messaging, careful media sequencing, and coordination between the brand, talent representatives, and international press.</div>
+        <div class="pillar-tag">Leadership Narrative</div>
+      </div>
+
+      <div class="pillar" data-n="2">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Talent Strategy &amp; Management</div>
+        <div class="pillar-body">The Simons era required rebuilding Calvin Klein's talent communications program from the ground up to match a new creative vision. That meant identifying and cultivating relationships with talent whose cultural currency aligned with Simons' aesthetic — not just the brand's existing celebrity roster — and developing the communications strategy around how those relationships were positioned publicly. The By Appointment casting, the NYFW front row, the campaign talent: each was a deliberate communications decision as much as a creative one.</div>
+        <div class="pillar-tag">Talent &amp; Partnerships</div>
+      </div>
+
+      <div class="pillar" data-n="3">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Dual-Tier Brand Messaging</div>
+        <div class="pillar-body">One of the most structurally complex challenges of this era was developing and maintaining distinct but coherent messaging across two tiers: the mass-market core (underwear, denim, fragrance — hundreds of millions in quarterly revenue) and the luxury runway tier (205W39NYC — a prestige investment built from scratch). Different media relationships, different narrative frameworks, different timelines — but both had to read as expressions of a single, unified brand identity.</div>
+        <div class="pillar-tag">Messaging Architecture</div>
+      </div>
+
+      <div class="pillar" data-n="4">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Cultural Partnership Communications</div>
+        <div class="pillar-body">The Warhol Foundation collaboration and the creative partnership with Sterling Ruby were not just aesthetic choices — they were communications assets that repositioned Calvin Klein within a high-culture conversation no fashion brand can buy its way into. My work: develop the press strategy around these partnerships, brief arts editors alongside fashion editors, build the "American art meets American basics" story across publications that had never covered the brand before, and sustain that narrative through multiple seasons.</div>
+        <div class="pillar-tag">Cultural &amp; Arts PR</div>
+      </div>
+
+      <div class="pillar" data-n="5">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Runway &amp; Show Communications</div>
+        <div class="pillar-body">Managing communications around the return of Calvin Klein runway shows meant overseeing every touchpoint as a communications event: the invite strategy, the pre-show narrative, the in-show environment, post-show press briefings, international imagery rollout, and retail communications that translated runway moments into commercial context. For the debut show alone, this coordination spanned every major fashion capital simultaneously.</div>
+        <div class="pillar-tag">Show &amp; Event Comms</div>
+      </div>
+
+      <div class="pillar" data-n="6">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Internal Culture &amp; Change Communications</div>
+        <div class="pillar-body">Calvin Klein had no dedicated internal communications function before Alex arrived. She built it from scratch — creating the infrastructure that gave the organization a coherent internal voice for the first time. That foundation was stress-tested immediately: aligning the organization around a new creative vision, managing the transition from multiple creative leads to a single CCO, and building confidence for commercial teams navigating an evolving brand identity all required a function that was already operational, already trusted, and capable of moving at the speed the transition demanded.</div>
+        <div class="pillar-tag">Internal &amp; Corporate Comms</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     MILESTONE SPOTLIGHT
+════════════════════════════ -->
+<section class="section milestone-section">
+  <div class="section-inner">
+    <div class="s-label fi">04 — Milestone Spotlight</div>
+    <h2 class="s-title fi">The moments that<br>defined the era</h2>
+    <div class="milestone-grid fi">
+
+      <div class="mc">
+        <div class="mc-date">January 22, 2017</div>
+        <div class="mc-title">The By Appointment Drop</div>
+        <p class="mc-body">A deliberate surprise: 14 looks released simultaneously on Calvin Klein's social channels with no advance press. No interviews, no previews — just images, a Simons quote, and an April 1 date for atelier appointments to open. The communications decision to withhold and then release was as important as the collection itself — generating immediate international coverage and announcing the new era's tone before a single runway look had been shown.</p>
+      </div>
+
+      <div class="mc">
+        <div class="mc-date">February 10, 2017</div>
+        <div class="mc-title">The NYFW Debut</div>
+        <p class="mc-body">Staged at 205 West 39th Street — Calvin Klein's own headquarters, chosen deliberately. A Sterling Ruby installation filled the show space. The collection: Amish quilts, clear vinyl coats, steel-toed western boots, denim. Kaia Gerber made her runway debut. Gwyneth Paltrow, Julianne Moore, SJP, and Millie Bobby Brown occupied the front row. WWD called it "a great debut." The announcement of Simons' appointment had already made this the hottest ticket at NYFW — my work was to ensure the show lived up to that billing and that the press story we built extended the moment beyond a single news cycle.</p>
+      </div>
+
+      <div class="mc">
+        <div class="mc-date">May 2017</div>
+        <div class="mc-title">The Met Gala Validation</div>
+        <p class="mc-body">One month after the atelier opened to the public, both Julianne Moore and Gwyneth Paltrow wore Calvin Klein By Appointment to the Met Gala — fashion's highest-profile red carpet moment, and an immediate proof point for the new bespoke pillar. This was not luck. It was the result of deliberate celebrity communications and styling strategy built over the preceding months, identifying the right relationships and managing the coordination required to land the placement at exactly the right moment.</p>
+      </div>
+
+      <div class="mc">
+        <div class="mc-date">June 2017</div>
+        <div class="mc-title">The CFDA Double Win</div>
+        <p class="mc-body">Raf Simons took both Womenswear and Menswear Designer of the Year at the 2017 CFDA Fashion Awards — a rare double recognition in less than a year under his direction, and a formal endorsement from the American industry of what the brand had built. The communications strategy extended the reinvention narrative: an American institution honoring a European for making an American brand relevant again. Simons won Womenswear again in 2018, cementing the era's critical standing.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     CAMPAIGN COMMS
+════════════════════════════ -->
+<section class="section campaign-section">
+  <div class="section-inner">
+    <div class="s-label fi">05 — Creative Campaigns</div>
+    <h2 class="s-title fi">Leading the communications<br>strategy behind every launch</h2>
+    <div class="campaign-grid fi">
+
+      <div class="cg">
+        <div class="cg-label">Spring 2017</div>
+        <div class="cg-title">American Classics</div>
+        <div class="cg-body">The first advertising campaign under Simons' direction: white briefs and dark denim posed alongside Warhol, Prince, Sterling Ruby, and Dan Flavin. Shot by Willy Vanderperre. Celebrated as one of the most intellectually rigorous fashion advertising campaigns in recent memory. My work: a dual-audience press strategy that served fashion and culture media with the artistic framing, while positioning the campaign for consumer and trade press as a reaffirmation of the brand's American basics DNA.</div>
+      </div>
+
+      <div class="cg">
+        <div class="cg-label">Spring 2017</div>
+        <div class="cg-title">CK By Appointment 1–14</div>
+        <div class="cg-body">Surprise social drop of the bespoke line campaign: Vanderperre-lensed, Olivier Rizzo-styled, starring Millie Bobby Brown alongside some of fashion's most significant models. Every look paired with classic white briefs — the visual thesis statement for the new era. My work: the surprise-release strategy, media narrative, talent communications, retail and trade press briefings, and the sustained coverage that followed through the April atelier opening.</div>
+      </div>
+
+      <div class="cg">
+        <div class="cg-label">Fall/Winter 2017</div>
+        <div class="cg-title">#mycalvins × Kardashian-Jenner</div>
+        <div class="cg-body">Under Simons' direction, #mycalvins continued as the brand's populist communications engine, with the Kardashian-Jenner family activated for a new denim and underwear campaign. My work: building the talent communications strategy, coordinating international press around the campaign launch, and managing the narrative bridge between the prestige 205W39NYC work and the mass-market #mycalvins activations — ensuring both read as expressions of the same brand.</div>
+      </div>
+
+    </div>
+
+    <blockquote class="fq fi" style="margin-top:40px;">
+      "This is probably the most distinctive vision for the brand that we've seen. The marketing all has a very similar feel and vibe, and that's something that has been missing for Calvin Klein."
+      <cite>— Nivindya Sharma, Director of Retail Strategy &amp; Insights, WGSN / Business of Fashion</cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     RESULTS
+════════════════════════════ -->
+<section class="section results-section">
+  <div class="section-inner">
+    <div class="s-label fi" style="color:#888;">06 — Results</div>
+    <h2 class="s-title fi" style="color:#1a1a1a;">The transformation<br>in numbers</h2>
+
+    <div class="results-grid fi">
+      <div class="rc">
+        <div class="rc-num">CFDA×3</div>
+        <div class="rc-label">Designer of the Year wins across Women's (×2) and Men's (×1) — 2017 and 2018</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">+9%</div>
+        <div class="rc-label">Projected brand revenue growth FY 2017; $943M in Q3 brand revenue alone</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">$8B</div>
+        <div class="rc-label">Global CK brand sales unified under a single coherent creative and communications identity</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">1 Month</div>
+        <div class="rc-label">From CK By Appointment's April 2017 launch to Met Gala red carpet placement</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">2×</div>
+        <div class="rc-label">First time in brand history all creative categories unified under a single CCO — runway, mass-market, fragrance, home</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">NYFW</div>
+        <div class="rc-label">Debut show described as the most anticipated show of the season; front row included Paltrow, Moore, SJP, Millie Bobby Brown</div>
+      </div>
+    </div>
+
+    <div class="results-note fi">
+      Brand coherence across $8B in global sales does not happen by creative direction alone. It requires a communications infrastructure that translates creative vision into press narrative, retail confidence, consumer understanding, and cultural credibility — simultaneously, in every market. During the Simons era, Calvin Klein achieved the brand clarity that industry analysts, fashion press, and the CFDA all independently recognized as a step-change transformation. That recognition is a communications outcome.
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     LESSONS
+════════════════════════════ -->
+<section class="section">
+  <div class="section-inner">
+    <div class="s-label fi">07 — What This Work Taught Me</div>
+    <h2 class="s-title fi">Principles I carry<br>from this era</h2>
+    <div class="lessons-grid fi">
+
+      <div class="lesson">
+        <div class="lesson-n">01</div>
+        <div class="lesson-title">The Announcement Is the First Creative Act</div>
+        <div class="lesson-body">Raf Simons' appointment was not a press release — it was a positioning statement. How we announced it, when we announced it, what narrative we built around it, and who we told first all shaped how the fashion industry, the press, and the public understood what Calvin Klein was becoming. In executive transitions, the communications leader's job starts before the designer walks in the door.</div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-n">02</div>
+        <div class="lesson-title">Luxury Requires Restraint in Communications</div>
+        <div class="lesson-body">The By Appointment drop taught me something I apply constantly: in luxury and fashion, withholding is a communications strategy. The silence before the drop, the absence of interviews, the decision to let the images speak — all of it created more press energy than any traditional launch briefing would have. Knowing when not to communicate is as important as knowing how to communicate.</div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-n">03</div>
+        <div class="lesson-title">Dual-Tier Brands Require Dual-Tier Narratives</div>
+        <div class="lesson-body">Managing communications across both the $20 brief and the $5,000 gown taught me that a coherent brand identity does not mean a single message. The mass-market and luxury tiers needed distinct stories for distinct audiences — but both stories had to point back to the same underlying brand truth. Building that architecture, and keeping it consistent across multiple markets and two years of campaigns, is among the most structurally demanding communications work I've done.</div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-n">04</div>
+        <div class="lesson-title">Cultural Credibility Cannot Be Bought — But It Can Be Built</div>
+        <div class="lesson-body">The Warhol Foundation partnership and Sterling Ruby collaboration generated press in publications that had never covered Calvin Klein before. That is earned credibility, and it came from the communications strategy around those partnerships as much as the partnerships themselves. Identifying the right cultural relationships and building the right narrative infrastructure to amplify them is a distinct discipline — one that sits at the intersection of PR, brand strategy, and cultural fluency.</div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-n">05</div>
+        <div class="lesson-title">Red Carpet Is Strategy, Not Serendipity</div>
+        <div class="lesson-body">Julianne Moore and Gwyneth Paltrow at the Met Gala in CK By Appointment, one month after launch, was not luck. It was the result of deliberate talent communications work: identifying the right relationships, developing the styling strategy, coordinating the placement at the right moment in the right context. Fashion communications at this level requires thinking about talent the way a strategist thinks about media — as channels with audiences, relationships, and timing.</div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-n">06</div>
+        <div class="lesson-title">Internal Coherence Is External Credibility</div>
+        <div class="lesson-body">The most durable communications outcome of the Simons era was brand coherence: every category, every market, every channel feeling like expressions of the same idea. That coherence was built as much inside the organization as out. Change communications, organizational alignment, internal narrative management — these are not separate from external brand work. They are the foundation it stands on.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     CLOSING
+════════════════════════════ -->
+<section class="section" style="background:#080808;padding:80px 0;">
+  <div class="section-inner">
+    <div style="max-width:800px;">
+      <div class="s-label fi">Final Reflection</div>
+      <h2 class="s-title fi">What it meant to<br>lead this work</h2>
+      <p class="body fi">The Raf Simons era at Calvin Klein was not a campaign. It was a transformation — of a brand's creative identity, its market positioning, its cultural standing, and its internal organization. To lead the communications through it was to hold all of those threads simultaneously: knowing what to say and what to leave unsaid, when to build anticipation and when to let the work speak, how to serve a visionary creative director while also serving the commercial realities of an $8 billion global business. The runway debuts, the atelier launch, the CFDA recognition, the Met Gala placements — none were inevitable. Each required a deliberate communications strategy, carefully executed. What I'm proudest of is not any single moment but the coherence of the whole: that for two years, every press story, every campaign launch, every cultural partnership told the same story about the same brand and made it feel like the most exciting thing happening in American fashion. That is what communications leadership at its best can do.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     FOOTER
+════════════════════════════ -->
+<footer>
+  <div class="footer-l">Alex Wagner · Calvin Klein · The Raf Simons Era</div>
+  <div class="footer-r">
+    Case Study · The New Currency<br>
+    Sources: WWD · Vogue · Business of Fashion · Hollywood Reporter<br>
+    Fashionista · The Fashion Law · FashionNetwork · Highsnobiety · WGSN
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

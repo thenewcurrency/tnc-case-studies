@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>#MyCalvins — Case Study | Alex Wagner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f7f5f0;
+    --off-white: #ede9e2;
+    --gray: #6b6b6b;
+    --accent: #c8b89a;
+    --accent-dark: #8a6a4a;
+    --rule: rgba(255,255,255,0.07);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 55% 45%;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 80px 64px;
+    z-index: 2;
+  }
+
+  .hero-right {
+    background: #111;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 80px 60px;
+  }
+
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px),
+      repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px);
+    z-index: 0;
+  }
+
+  .hero-right-content { position: relative; z-index: 1; }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 10vw, 136px);
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.35s forwards;
+  }
+
+  .hero-title .dim { color: rgba(247,245,240,0.22); }
+  .hero-title .gold { color: var(--accent); }
+
+  .hero-sub {
+    font-size: 13px;
+    color: var(--gray);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 28px;
+    max-width: 520px;
+    line-height: 1.8;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.55s forwards;
+  }
+
+  .rule { width: 100%; height: 1px; background: linear-gradient(90deg, var(--accent), transparent); margin: 36px 0; }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.75s forwards;
+  }
+
+  .stat-box { border-top: 1px solid rgba(255,255,255,0.09); padding-top: 14px; }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 38px; color: var(--accent); line-height: 1; }
+  .stat-label { font-size: 10px; color: var(--gray); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 4px; }
+
+  .landmark-list { display: flex; flex-direction: column; opacity: 0; animation: fadeUp 0.9s ease 0.9s forwards; }
+
+  .lm-item {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 20px;
+    align-items: start;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .lm-item:first-child { border-top: 1px solid var(--rule); }
+  .lm-date { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--accent); letter-spacing: 0.1em; padding-top: 2px; }
+  .lm-text { font-size: 13px; color: rgba(247,245,240,0.55); line-height: 1.6; }
+  .lm-text strong { color: rgba(247,245,240,0.85); font-weight: 400; }
+
+  .vbreak { height: 3px; background: linear-gradient(90deg, var(--accent) 0%, transparent 50%); }
+
+  .role-banner { background: #0e0e0e; border-top: 1px solid rgba(200,184,154,0.18); border-bottom: 1px solid rgba(200,184,154,0.18); padding: 52px 0; }
+  .role-inner { max-width: 1200px; margin: 0 auto; padding: 0 64px; display: grid; grid-template-columns: auto 1fr; gap: 64px; align-items: center; }
+  .role-id { border-left: 3px solid var(--accent); padding-left: 28px; }
+  .ri-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  .ri-name { font-family: 'Bebas Neue', sans-serif; font-size: 44px; line-height: 1; }
+  .ri-title { font-size: 13px; color: var(--gray); margin-top: 6px; }
+  .role-meta { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .rm-cell { padding: 0 36px; border-left: 1px solid var(--rule); }
+  .rm-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray); margin-bottom: 8px; }
+  .rm-value { font-size: 14px; color: rgba(247,245,240,0.72); line-height: 1.6; }
+
+  .overview-strip { background: var(--off-white); padding: 72px 0; }
+  .overview-grid { max-width: 1200px; margin: 0 auto; padding: 0 64px; display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid #d4d0c9; }
+  .ov-cell { padding: 36px 32px; border-right: 1px solid #d4d0c9; }
+  .ov-cell:last-child { border-right: none; }
+  .ov-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #888; margin-bottom: 10px; }
+  .ov-value { font-size: 15px; color: #1a1a1a; line-height: 1.5; }
+
+  .section { padding: 96px 0; }
+  .section-inner { max-width: 1200px; margin: 0 auto; padding: 0 64px; }
+  .s-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
+  .s-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 5vw, 68px); line-height: 1; letter-spacing: -0.01em; margin-bottom: 32px; }
+  .body { font-size: 16px; line-height: 1.78; color: rgba(247,245,240,0.72); max-width: 680px; }
+  .body + .body { margin-top: 20px; }
+
+  .tl-section { background: #0d0d0d; }
+  .timeline { position: relative; margin-top: 56px; }
+  .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: linear-gradient(180deg, var(--accent) 0%, rgba(200,184,154,0.1) 100%); }
+  .tl-item { display: grid; grid-template-columns: 148px 1fr; gap: 40px; margin-bottom: 56px; padding-left: 28px; position: relative; }
+  .tl-item::before { content: ''; position: absolute; left: -4px; top: 7px; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d0d; }
+  .tl-date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.1em; padding-top: 3px; }
+  .tl-content h4 { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 0.03em; margin-bottom: 10px; }
+  .tl-content p { font-size: 14px; color: rgba(247,245,240,0.6); line-height: 1.75; max-width: 620px; }
+  .tl-content p + p { margin-top: 12px; }
+
+  .pq-section { background: var(--off-white); padding: 96px 0; }
+  .pq-inner { max-width: 1200px; margin: 0 auto; padding: 0 64px; display: grid; grid-template-columns: 1fr 2.2fr; gap: 80px; align-items: center; }
+  .pq-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #888; }
+  .pq-text { font-family: 'Bebas Neue', sans-serif; font-size: clamp(30px, 3.8vw, 52px); line-height: 1.06; color: #1a1a1a; }
+  .pq-text em { color: var(--accent-dark); font-style: normal; }
+
+  /* Pillars — 3-col and 2-col variants */
+  .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); margin-top: 56px; }
+  .pillars-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--rule); margin-top: 0; }
+
+  .pillar { background: #0f0f0f; padding: 44px 38px; position: relative; overflow: hidden; transition: background 0.3s; }
+  .pillar:hover { background: #141414; }
+  .pillar::before { content: attr(data-n); font-family: 'Bebas Neue', sans-serif; font-size: 110px; color: rgba(200,184,154,0.05); position: absolute; top: -8px; right: 16px; line-height: 1; pointer-events: none; }
+  .pillar-icon { font-size: 22px; margin-bottom: 18px; }
+  .pillar-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 0.03em; margin-bottom: 12px; }
+  .pillar-body { font-size: 13.5px; color: rgba(247,245,240,0.58); line-height: 1.72; }
+  .pillar-tag { display: inline-block; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); border: 1px solid rgba(200,184,154,0.28); padding: 4px 10px; margin-top: 18px; }
+
+  .section-gap { margin-top: 2px; }
+
+  /* Differentiator callout */
+  .diff-box { background: #0f0f0f; border: 1px solid rgba(200,184,154,0.2); padding: 48px; margin-top: 2px; }
+  .diff-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+  .diff-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 0.02em; margin-bottom: 20px; }
+  .diff-body { font-size: 15px; color: rgba(247,245,240,0.65); line-height: 1.78; max-width: 780px; }
+
+  /* Earned media press strip */
+  .press-strip { background: #0a0a0a; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 36px 0; margin-top: 56px; overflow: hidden; }
+  .press-inner { max-width: 1200px; margin: 0 auto; padding: 0 64px; }
+  .press-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gray); margin-bottom: 20px; }
+  .press-logos { display: flex; flex-wrap: wrap; gap: 0; }
+  .press-item { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.12em; color: rgba(247,245,240,0.2); padding: 8px 28px 8px 0; border-right: 1px solid var(--rule); margin-right: 28px; margin-bottom: 12px; transition: color 0.3s; }
+  .press-item:hover { color: var(--accent); }
+  .press-item:last-child { border-right: none; }
+
+  /* Corporate comms section */
+  .corp-section { background: #0d0d0d; }
+  .corp-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: var(--rule); margin-top: 56px; }
+  .cg { background: var(--black); padding: 44px 40px; transition: background 0.3s; }
+  .cg:hover { background: #0d0d0d; }
+  .cg-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+  .cg-title { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 0.02em; margin-bottom: 14px; line-height: 1; }
+  .cg-body { font-size: 14px; color: rgba(247,245,240,0.58); line-height: 1.75; }
+
+  .milestone-section { background: #0a0a0a; }
+  .milestone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--rule); margin-top: 56px; }
+  .mc { background: var(--black); padding: 44px 40px; transition: background 0.3s; }
+  .mc:hover { background: #0d0d0d; }
+  .mc-date { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+  .mc-title { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 0.02em; margin-bottom: 14px; line-height: 1; }
+  .mc-body { font-size: 14px; color: rgba(247,245,240,0.58); line-height: 1.75; }
+  .mc-body + .mc-body { margin-top: 12px; }
+
+  .crisis-section { background: #111; }
+  .crisis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; margin-top: 56px; align-items: start; }
+  .crisis-response { border: 1px solid rgba(200,184,154,0.15); padding: 40px; }
+  .cr-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 24px; }
+  .cr-item { font-size: 13.5px; color: rgba(247,245,240,0.58); line-height: 1.72; padding: 16px 0; border-bottom: 1px solid var(--rule); }
+  .cr-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .cr-item::before { content: '→ '; color: var(--accent); }
+
+  .results-section { background: var(--off-white); }
+  .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid #d4d0c9; margin-top: 56px; }
+  .rc { padding: 44px 36px; border-right: 1px solid #d4d0c9; border-bottom: 1px solid #d4d0c9; }
+  .rc:nth-child(3n) { border-right: none; }
+  .rc:nth-last-child(-n+3) { border-bottom: none; }
+  .rc::after { content: ''; display: block; width: 36px; height: 2px; background: #1a1a1a; margin-top: 22px; }
+  .rc-num { font-family: 'Bebas Neue', sans-serif; font-size: 58px; line-height: 1; color: #1a1a1a; }
+  .rc-label { font-size: 13px; color: #777; margin-top: 8px; line-height: 1.5; }
+  .results-note { margin-top: 44px; padding: 32px 40px; background: var(--black); font-size: 14px; line-height: 1.75; color: rgba(247,245,240,0.65); border-left: 3px solid var(--accent); }
+
+  .lessons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 56px; background: var(--rule); }
+  .lesson { background: var(--black); padding: 44px 40px; transition: background 0.3s; }
+  .lesson:hover { background: #0d0d0d; }
+  .lesson-n { font-family: 'Bebas Neue', sans-serif; font-size: 72px; color: rgba(200,184,154,0.1); line-height: 1; margin-bottom: -8px; }
+  .lesson-title { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 0.02em; margin-bottom: 12px; }
+  .lesson-body { font-size: 14px; color: rgba(247,245,240,0.58); line-height: 1.75; }
+
+  blockquote.fq { border-left: 3px solid var(--accent); padding: 0 0 0 26px; font-style: italic; font-size: 17px; color: rgba(247,245,240,0.62); line-height: 1.75; margin: 32px 0; }
+  blockquote.fq cite { display: block; font-style: normal; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-top: 10px; }
+
+  blockquote.fq-dark { border-left: 3px solid var(--accent-dark); padding: 0 0 0 26px; font-style: italic; font-size: 17px; color: rgba(26,26,26,0.7); line-height: 1.75; margin: 32px 0; }
+  blockquote.fq-dark cite { display: block; font-style: normal; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent-dark); margin-top: 10px; }
+
+  footer { background: var(--black); border-top: 1px solid var(--rule); padding: 60px 64px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .footer-l { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 0.1em; color: rgba(247,245,240,0.12); }
+  .footer-r { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray); letter-spacing: 0.15em; text-align: right; line-height: 1.8; }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+  .fi { opacity:0; transform:translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .fi.visible { opacity:1; transform:translateY(0); }
+
+  @media (max-width: 960px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hero-left { padding: 60px 32px; }
+    .section-inner, .role-inner, .pq-inner, .press-inner { padding: 0 32px; }
+    .overview-grid { grid-template-columns: 1fr 1fr; }
+    .ov-cell { border-bottom: 1px solid #d4d0c9; }
+    .pillars, .pillars-2, .corp-grid { grid-template-columns: 1fr; }
+    .milestone-grid, .lessons-grid, .crisis-grid { grid-template-columns: 1fr; }
+    .results-grid { grid-template-columns: 1fr; }
+    .rc { border-right: none; }
+    .role-inner { grid-template-columns: 1fr; gap: 40px; }
+    .role-meta { grid-template-columns: 1fr; gap: 20px; }
+    .rm-cell { border-left: none; border-top: 1px solid var(--rule); padding: 16px 0 0; }
+    .pq-inner { grid-template-columns: 1fr; gap: 20px; }
+    footer { flex-direction: column; gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════
+     HERO
+═════════════════════════ -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="eyebrow">Campaign, Communications &amp; Brand Leadership · Calvin Klein · 2015–2018</div>
+    <div class="hero-title">
+      <span class="gold">#MY</span><br>
+      CALVINS
+    </div>
+    <div class="hero-sub">
+      Leading the influencer, earned media, brand communications, and corporate narrative behind fashion's most enduring UGC campaign
+    </div>
+    <div class="rule"></div>
+    <div class="hero-stats">
+      <div class="stat-box">
+        <div class="stat-num">884K+</div>
+        <div class="stat-label">Instagram posts tagged #mycalvins</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">592.8M</div>
+        <div class="stat-label">Social engagements Jan 2016 – Jan 2018</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">145K+</div>
+        <div class="stat-label">Retweets from a single Bieber post</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">$3.1B</div>
+        <div class="stat-label">Brand revenue, FY 2016</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-right-content">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(247,245,240,0.2);letter-spacing:0.25em;text-transform:uppercase;margin-bottom:28px;">Landmark Moments</div>
+      <div class="landmark-list">
+        <div class="lm-item">
+          <div class="lm-date">2015</div>
+          <div class="lm-text"><strong>Justin Bieber campaign breaks</strong> — 145K+ retweets, global press surge across entertainment and fashion. Talent relationship and all behind-the-scenes content managed personally.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-date">Spr 2016</div>
+          <div class="lm-text"><strong>"I ___ in #mycalvins" era</strong> — influencer partners cast in the global campaign. Vogue, WWD, The Cut, Refinery29, Dazed, Highsnobiety all led. One of fashion's first influencer-to-campaign pipelines.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-date">May 2016</div>
+          <div class="lm-text"><strong>Crisis moment</strong> — ABC News, Adweek lead. Strategic hold in partnership with general counsel. No retraction. Campaign performance unaffected. Story recedes within weeks.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-date">Aug 2016</div>
+          <div class="lm-text"><strong>Raf Simons named CCO</strong> — PVH brand narrative, internal alignment, and retail partner communications managed across a once-in-a-generation leadership transition.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-date">2017</div>
+          <div class="lm-text"><strong>"Our Family. #MyCalvins" series</strong> — Solange, A$AP Rocky, Kaia &amp; Presley Gerber. Influencer partners seated front row at NYFW and activated at global events worldwide.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-date">Jan 2018</div>
+          <div class="lm-text"><strong>Kardashian-Jenner campaign</strong> — Kim, Kourtney, Khloé, Kendall, Kylie. Became one of the most-covered pop culture moments of early 2018. Global press across fashion, entertainment, and news.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="vbreak"></div>
+
+<!-- ════════════════════
+     ROLE BANNER
+═════════════════════════ -->
+<section class="role-banner">
+  <div class="role-inner">
+    <div class="role-id">
+      <div class="ri-label">Case Study Author &amp; Campaign Leader</div>
+      <div class="ri-name">Alex Wagner</div>
+      <div class="ri-title">Senior Communications &amp; Campaign Leader, Calvin Klein</div>
+    </div>
+    <div class="role-meta">
+      <div class="rm-cell">
+        <div class="rm-label">Campaign Scope</div>
+        <div class="rm-value">Global influencer strategy &amp; execution, owned/organic social architecture, talent relations &amp; negotiations, behind-the-scenes content, earned media, crisis management, legal partnership</div>
+      </div>
+      <div class="rm-cell">
+        <div class="rm-label">Brand &amp; Corp Comms Scope</div>
+        <div class="rm-value">PVH investor-facing brand narrative, internal communications &amp; org alignment, trade &amp; retail partner communications, executive visibility &amp; spokesperson strategy</div>
+      </div>
+      <div class="rm-cell">
+        <div class="rm-label">Leadership Era</div>
+        <div class="rm-value">Joined a campaign already in market; shaped and led it from the Bieber era through "I ___" to the "Our Family" Kardashian-Jenner culmination — across both campaign and corporate communications functions</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════
+     OVERVIEW
+═════════════════════════ -->
+<section class="overview-strip">
+  <div class="overview-grid">
+    <div class="ov-cell">
+      <div class="ov-label">Brand</div>
+      <div class="ov-value">Calvin Klein (PVH Corp.)</div>
+    </div>
+    <div class="ov-cell">
+      <div class="ov-label">Leadership Span</div>
+      <div class="ov-value">2015 – 2018</div>
+    </div>
+    <div class="ov-cell">
+      <div class="ov-label">Campaign Mechanic</div>
+      <div class="ov-value">Influencer, UGC, owned social, earned media, global talent</div>
+    </div>
+    <div class="ov-cell">
+      <div class="ov-label">Full Scope</div>
+      <div class="ov-value">Campaign, influencer, earned, social, brand comms, corp comms, crisis, legal</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════
+     THE BRIEF
+═════════════════════════ -->
+<section class="section">
+  <div class="section-inner">
+    <div class="s-label fi">01 — Context &amp; Role</div>
+    <h2 class="s-title fi">Reimagining a hashtag as an inclusive<br>pop culture movement — activated<br>by audiences worldwide</h2>
+    <p class="body fi">#mycalvins launched before I arrived at Calvin Klein. The possessive hashtag and the campaign's foundational concept were already in market — and already generating cultural momentum. What I inherited was a strong idea that needed the infrastructure to scale: a global influencer program with strategic intent behind it, an owned social strategy with a distinct point of view, talent relationships managed at the level the campaign's ambition demanded, and a communications apparatus capable of extending campaign moments into sustained press cycles.</p>
+    <p class="body fi">My leadership era ran from the Bieber campaign through the "I ___ in #mycalvins" iteration and on to the "Our Family. #MyCalvins" Kardashian-Jenner campaign under Raf Simons. Across that span, my role consistently transcended traditional communications scope. I was in the room for creative discussions — contributing to campaign direction, briefing, and copy — while also managing every talent relationship and negotiation personally, writing and producing all behind-the-scenes content with campaign talent, co-architecting the owned social strategy with the social team, building and leading the global influencer program, and working hand in hand with general counsel throughout.</p>
+    <p class="body fi">Running parallel to all of it was a full corporate and brand communications mandate — one I built from scratch. Calvin Klein had no dedicated internal communications function before I arrived. I created it — establishing the infrastructure and practice that gave the organization a coherent internal voice for the first time. That function became the foundation for the PVH investor-facing brand narrative, internal alignment through major transitions, trade and retail partner communications, and the executive visibility strategy that gave Calvin Klein's leadership a credible public voice across business and fashion media simultaneously.</p>
+    <blockquote class="fq fi">
+      "This is probably the most distinctive vision for the brand that we've seen. The marketing all has a very similar feel and vibe — and that's something that has been missing for Calvin Klein."
+      <cite>— Nivindya Sharma, Director of Retail Strategy &amp; Insights, WGSN / Business of Fashion</cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- ════════════════════
+     TIMELINE
+═════════════════════════ -->
+<section class="section tl-section">
+  <div class="section-inner">
+    <div class="s-label fi">02 — The Work, Chapter by Chapter</div>
+    <h2 class="s-title fi">Campaign, brand, and corporate comms —<br>across every phase of the work</h2>
+
+    <div class="timeline fi">
+
+      <div class="tl-item">
+        <div class="tl-date">2015</div>
+        <div class="tl-content">
+          <h4>The Bieber Campaign — Talent, Content, and the Press Infrastructure</h4>
+          <p>I managed the Bieber talent relationship directly — briefing, negotiation, and all ongoing communication with his team throughout the campaign. I personally wrote and produced all behind-the-scenes interviews and content, material that generated its own earned media cycle distinct from the campaign imagery and ran across entertainment, fashion, and pop culture verticals simultaneously. When his post generated 145,000+ retweets, the global press surge was managed through an earned media infrastructure built to absorb speed at scale: fashion press (Vogue, WWD, Dazed), entertainment media, and mainstream news all covered the moment, extending what could have been a 24-hour spike into a weeks-long brand story.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">2015–2016</div>
+        <div class="tl-content">
+          <h4>The Influencer Program — Architecture, Execution, and an Industry First</h4>
+          <p>I built and led the global influencer program that became the structural engine of #mycalvins — a strategically designed system intended to generate culturally credible, platform-native content at scale, not conventional media placements. What distinguished it was what happened next: influencer partners my team had activated were cast directly into the brand's global paid campaigns. They sat front row at Calvin Klein runway shows. They participated in brand events around the world. Calvin Klein was among the first major fashion brands to operate this model at scale — the line between influencer partner and campaign talent effectively ceased to exist. The earned media implications were significant: campaign coverage in Vogue, Highsnobiety, Refinery29, The Cut, and WWD consistently featured the same names that had started as influencer partners, creating a coherent press narrative about a brand that had developed genuine cultural relationships rather than transactional ones.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">Spring 2016</div>
+        <div class="tl-content">
+          <h4>"I ___ in #mycalvins" — Campaign, Comms, and the Full Scope Simultaneously</h4>
+          <p>My involvement deepened across every dimension at once. I was in the room for creative discussions around the campaign's direction and copy framework. I managed every talent relationship and negotiation in direct partnership with general counsel. I wrote and conducted all behind-the-scenes interviews and content personally — with FKA twigs, Kendall Jenner, Kendrick Lamar, Justin Bieber, Margot Robbie, Kate Moss, Grace Coddington, David Blaine, and Bella Hadid — content that generated press in Vogue, Dazed, Refinery29, and i-D distinct from the campaign imagery. The earned media program ran across global fashion, culture, and entertainment press simultaneously in every major market. The trade and retail communications program ran in parallel — briefing buyers and wholesale accounts on the campaign's commercial context, with 440,000+ organic user posts already a genuine retail-facing asset.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">May 2016</div>
+        <div class="tl-content">
+          <h4>The Crisis — Legal, Communications, and Corporate Alignment</h4>
+          <p>A single campaign image triggered a significant media criticism cycle — ABC News, Adweek, and major fashion publications leading. Because I had managed the talent contract in direct partnership with general counsel, I led a response with full legal and strategic awareness from the start. The communications decision — no retraction, no apology, disciplined "no comment" posture — was made with legal confidence and grounded in a clear understanding of Calvin Klein's 40-year advertising legacy. Internally, the organization needed to be aligned and calm; externally, the brand needed to hold its position without amplifying the story. Both required active management. Platform growth continued uninterrupted. The story receded within weeks without material impact on campaign performance, brand standing, or retail partner confidence.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">Aug 2016 – 2017</div>
+        <div class="tl-content">
+          <h4>The Raf Simons Transition — Brand Narrative, Internal Alignment, and Retail Comms</h4>
+          <p>The appointment of Raf Simons as CCO was a corporate communications event as much as a creative one — requiring simultaneous management across PVH investor narrative, internal organization alignment, trade and retail partner communications, and global earned media. I was part of the internal leadership team managing that transition: the departure framing for Francisco Costa and Italo Zucchelli, the announcement strategy for Simons, and the sustained narrative work that framed the new creative direction as evolution rather than disruption. Ensuring Calvin Klein's leadership spoke with a consistent, confident voice across business media and fashion media simultaneously — at a moment when any inconsistency would have been amplified — was among the most demanding spokesperson strategy work of my tenure.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">2017–2018</div>
+        <div class="tl-content">
+          <h4>"Our Family. #MyCalvins" — The Culminating Chapter</h4>
+          <p>The campaign series that culminated in the Kardashian-Jenner shoot — Kim, Kourtney, Khloé (visibly pregnant), Kendall, and Kylie (strategically concealed under the campaign's signature Americana quilt), shot by Willy Vanderperre in Thousand Oaks — was the fullest expression of everything the program had built. I managed talent relationships and negotiations across the full series, produced all behind-the-scenes content, and ran the global influencer program alongside it. The Kardashian-Jenner chapter became one of the most-covered pop culture moments of early 2018 — driven in part by Kylie's concealed pregnancy — generating press across entertainment, mainstream news, and celebrity outlets that no paid media buy could have replicated. Total posts reached 884K+ and nearly 600 million social engagements across the campaign's run.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════
+     PULL QUOTE
+═════════════════════════ -->
+<section class="pq-section">
+  <div class="pq-inner">
+    <div class="pq-label">The Defining Insight</div>
+    <div class="pq-text">
+      The influencers didn't support the campaign.
+      <em>They became it.</em>
+      Cast in the ads. Front row at the shows. Across events worldwide.
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════
+     SCOPE — CAMPAIGN
+═════════════════════════ -->
+<section class="section">
+  <div class="section-inner">
+    <div class="s-label fi">03 — Campaign &amp; Communications Scope</div>
+    <h2 class="s-title fi">A role that transcended<br>traditional communications</h2>
+    <div class="pillars fi">
+
+      <div class="pillar" data-n="1">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Global Influencer Strategy &amp; Execution</div>
+        <div class="pillar-body">I architected the global influencer strategy and built and led the team that executed it — a structured program designed to generate culturally credible, platform-native content at scale, not conventional media placements. These were relationship investments, not media buys. The result was a program the creative and casting teams built directly on top of — integrating influencer partners into global paid campaigns, runway show front rows, and worldwide brand events.</div>
+        <div class="pillar-tag">Influencer Strategy</div>
+      </div>
+
+      <div class="pillar" data-n="2">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Earned Media &amp; Global Press</div>
+        <div class="pillar-body">Every campaign launch was supported by a global earned media program built to run across fashion (Vogue, WWD, Business of Fashion, Dazed, Highsnobiety, i-D), entertainment (People, Entertainment Weekly), culture (The Cut, Refinery29, W Magazine), and mainstream news simultaneously. The infrastructure handled both the controlled cadence of a planned launch and the sudden volume of a viral moment — proven across the Bieber surge, the "I ___" rollouts, and the Kardashian-Jenner cycle, which crossed into pop culture territory no fashion campaign had reached in years.</div>
+        <div class="pillar-tag">Earned Media</div>
+      </div>
+
+      <div class="pillar" data-n="3">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Owned &amp; Organic Social Architecture</div>
+        <div class="pillar-body">In close partnership with the social team, I co-architected the owned and organic social strategy that gave Calvin Klein a distinct, platform-native voice — continuous with the influencer program and campaign rather than running alongside them as a separate broadcast. The strategy amplified UGC participation, extended earned moments, and maintained brand coherence across dozens of markets simultaneously. The 884K+ organic posts and 592.8M engagements are, in large part, the output of that architecture.</div>
+        <div class="pillar-tag">Social Strategy</div>
+      </div>
+
+      <div class="pillar" data-n="4">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Talent Relations, Negotiations &amp; Content</div>
+        <div class="pillar-body">I owned the talent relationships across the campaign's full arc — from initial briefing through contract negotiation in direct partnership with general counsel, through ongoing management and all content production. I personally wrote and conducted every behind-the-scenes interview and content piece with campaign talent: Justin Bieber, FKA twigs, Kendall Jenner, Kendrick Lamar, Margot Robbie, Kate Moss, Grace Coddington, David Blaine, Bella Hadid, and the Kardashian-Jenner family. That content was a primary earned media driver — generating press distinct from the campaign imagery and sustaining stories across multiple news cycles.</div>
+        <div class="pillar-tag">Talent &amp; Content</div>
+      </div>
+
+      <div class="pillar" data-n="5">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Creative Contribution &amp; Campaign Direction</div>
+        <div class="pillar-body">My involvement included meaningful participation in creative discussions — contributing to campaign direction, briefing, and copy — without leading the creative function. Being in those conversations shaped the quality of every execution decision downstream: the influencer brief, the talent messaging, the content strategy, the earned media narrative. Communications leaders embedded in the creative process consistently make better decisions than those who receive it finished.</div>
+        <div class="pillar-tag">Creative Partnership</div>
+      </div>
+
+      <div class="pillar" data-n="6">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Crisis Management &amp; Legal Partnership</div>
+        <div class="pillar-body">Working hand in hand with general counsel was a consistent dimension of the role — on talent contracts, influencer agreements, content rights, and emerging issues. The May 2016 crisis response was only possible because the legal-communications partnership was functional before the controversy arrived. The two functions operated as a single decision-making unit — legally sound and strategically coherent simultaneously — not as sequential approvals. That integration is now a standard part of how I approach high-stakes brand work.</div>
+        <div class="pillar-tag">Crisis &amp; Legal</div>
+      </div>
+
+    </div>
+
+    <!-- Influencer-to-campaign pipeline callout -->
+    <div class="diff-box fi">
+      <div class="diff-eyebrow">Industry First</div>
+      <div class="diff-title">The Influencer-to-Campaign Pipeline</div>
+      <div class="diff-body">What made Calvin Klein's influencer approach genuinely pioneering was not the use of influencers — it was what happened to them. The partners my team identified and activated for #mycalvins didn't stay in the influencer lane. They were cast in the global paid advertising campaigns. They sat front row at New York Fashion Week. They traveled to brand events around the world. Calvin Klein was among the first major fashion brands to collapse the division between influencer partner and campaign talent intentionally, at scale, and with the creative team's full participation — a model that is now standard practice across the industry.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════
+     EARNED MEDIA PRESS STRIP
+═════════════════════════ -->
+<div class="press-strip fi">
+  <div class="press-inner">
+    <div class="press-label">Earned Media Coverage — Publications Across Every Launch Cycle</div>
+    <div class="press-logos">
+      <div class="press-item">Vogue</div>
+      <div class="press-item">WWD</div>
+      <div class="press-item">Business of Fashion</div>
+      <div class="press-item">The Cut</div>
+      <div class="press-item">Refinery29</div>
+      <div class="press-item">W Magazine</div>
+      <div class="press-item">Dazed</div>
+      <div class="press-item">Highsnobiety</div>
+      <div class="press-item">i-D</div>
+      <div class="press-item">Fashionista</div>
+      <div class="press-item">ABC News</div>
+      <div class="press-item">People</div>
+      <div class="press-item">Entertainment Weekly</div>
+      <div class="press-item">Adweek</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════
+     CORPORATE & BRAND COMMS
+═════════════════════════ -->
+<section class="section corp-section">
+  <div class="section-inner">
+    <div class="s-label fi">04 — Brand &amp; Corporate Communications</div>
+    <h2 class="s-title fi">The corporate layer behind<br>every campaign moment</h2>
+    <p class="body fi" style="margin-bottom:56px;">Running parallel to the campaign work was a full corporate and brand communications mandate — managing the institutional narrative around Calvin Klein's cultural momentum across investors, internal stakeholders, retail partners, and the executive team simultaneously. This is the work that rarely appears in campaign case studies and rarely gets credited. It is also the work that determines whether campaign success translates into lasting brand equity or remains an isolated moment.</p>
+
+    <div class="corp-grid fi">
+
+      <div class="cg">
+        <div class="cg-label">PVH Investor-Facing Narrative</div>
+        <div class="cg-title">Translating Cultural Momentum into Brand Equity Language</div>
+        <p class="cg-body">Calvin Klein operated within PVH Corp., a publicly traded company where brand communications had direct investor implications. My work included developing and maintaining the brand narrative that connected #mycalvins' cultural reach — the engagement numbers, the UGC volume, the press coverage — to the commercial brand equity story PVH needed to tell investors and analysts. When the brand reported +9% projected revenue growth in FY 2017 and $943M in Q3 sales, those results were built on years of consistent, credible brand momentum management. The cultural story and the commercial story were the same story, told in different registers for different audiences.</p>
+      </div>
+
+      <div class="cg">
+        <div class="cg-label">Internal Communications &amp; Org Alignment</div>
+        <div class="cg-title">Building the Function — Then Using It When It Mattered Most</div>
+        <p class="cg-body">Calvin Klein had no dedicated internal communications function before I arrived. I built it from the ground up — establishing the infrastructure, cadence, and practice that gave the organization a coherent internal voice for the first time. That foundation proved essential when the Raf Simons appointment created the most significant organizational transition in the brand's modern history. Replacing two long-tenured creative directors with a single CCO carrying complete creative authority required an internal communications function that could move quickly, speak credibly, and hold the organization steady. It required a function that had already been built and trusted.</p>
+      </div>
+
+      <div class="cg">
+        <div class="cg-label">Trade &amp; Retail Partner Communications</div>
+        <div class="cg-title">Making Cultural Relevance Commercially Legible</div>
+        <p class="cg-body">Calvin Klein's commercial success depended on the confidence of retail and wholesale partners whose buying decisions were shaped as much by brand momentum as by product. The trade and retail communications program I ran translated campaign cultural reach into commercial language: briefing major retail accounts on campaign strategy, providing partners with the data and narrative to support sell-in decisions, and managing the communication of brand evolution through the Simons creative transition in a way that maintained retail confidence. When 440,000+ organic user posts and 592.8M social engagements became part of the commercial brief to wholesale partners, the brand's cultural investment became a tangible commercial asset.</p>
+      </div>
+
+      <div class="cg">
+        <div class="cg-label">Executive Visibility &amp; Spokesperson Strategy</div>
+        <div class="cg-title">Building Credible Leadership Voices Across Two Audiences</div>
+        <p class="cg-body">Calvin Klein's executive communications required a spokesperson strategy operating across two distinct media environments simultaneously: the fashion and culture press covering #mycalvins and the Simons transition, and the business and trade press covering PVH's commercial performance. Different voices, different narratives, different media relationships — but pointing back to the same brand story. I developed and managed the executive visibility program that kept the brand's commercial and cultural narratives reinforcing each other rather than creating confusion in the market.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════
+     CRISIS
+═════════════════════════ -->
+<section class="section crisis-section">
+  <div class="section-inner">
+    <div class="s-label fi">05 — Crisis Management</div>
+    <h2 class="s-title fi">When legal, communications, and<br>internal alignment operate as one</h2>
+    <div class="crisis-grid fi">
+      <div>
+        <p class="body">In May 2016, a single image from the Spring campaign triggered a significant media criticism cycle. ABC News, Adweek, and multiple major fashion publications led with the story. The brand was being called exploitative in the same news cycle that had been celebrating its cultural reach — a tension that required simultaneous management across press, internal stakeholders, and retail partners.</p>
+        <p class="body" style="margin-top:20px;">Because I had managed the talent relationship and contract in direct partnership with general counsel, I was positioned to lead a response that was legally sound, strategically coherent, and organizationally aligned from the start. The outcome — no retraction, no apology, no material impact on campaign performance, retail confidence, or brand standing — was the result of a crisis apparatus that had been built before it was needed.</p>
+        <blockquote class="fq" style="margin-top:32px;">
+          "The most effective crisis response is the one that never feels like a crisis response. You hold the position, let the brand's history do the work, and get out of the way of the story you don't want to tell."
+          <cite>— Alex Wagner</cite>
+        </blockquote>
+      </div>
+      <div class="crisis-response">
+        <div class="cr-title">The Response — Across Every Function</div>
+        <div class="cr-item">No retraction, no apology — decision made with full legal awareness and grounded in Calvin Klein's 40-year history of intentional provocation, from Brooke Shields to Marky Mark to Kate Moss.</div>
+        <div class="cr-item">Press framing shifted from reactive criticism toward historical analysis by contextualizing the image within the brand's advertising legacy — a move that required deep brand knowledge, not just media relations instinct.</div>
+        <div class="cr-item">Internal stakeholders and retail partners were proactively aligned with the response rationale, preventing secondary damage from organizational uncertainty or partner hesitation during the coverage cycle.</div>
+        <div class="cr-item">The influencer program and UGC ecosystem continued operating in parallel, providing organic positive content without any brand-side messaging that would have reignited the story or signaled defensiveness.</div>
+        <div class="cr-item">Disciplined "no comment" posture with press maintained brand authority and denied the story oxygen. Platform growth was uninterrupted. The story receded. Retail partner confidence held.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════
+     RESULTS
+═════════════════════════ -->
+<section class="section results-section">
+  <div class="section-inner">
+    <div class="s-label fi" style="color:#888;">06 — Results</div>
+    <h2 class="s-title fi" style="color:#1a1a1a;">The proof — campaign,<br>brand, and commercial</h2>
+
+    <div class="results-grid fi">
+      <div class="rc">
+        <div class="rc-num">884K+</div>
+        <div class="rc-label">Total Instagram posts tagged #mycalvins across the campaign lifespan</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">592.8M</div>
+        <div class="rc-label">Total social engagements around the CK brand, Jan 2016 – Jan 2018</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">440K</div>
+        <div class="rc-label">Organic user-generated posts by Spring 2016</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">+2.2M</div>
+        <div class="rc-label">New Facebook followers at peak; +1.8M Instagram; +1M Twitter</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">$943M</div>
+        <div class="rc-label">Calvin Klein brand revenue, Q3 2017 — +9% projected FY growth (PVH Corp.)</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">Global</div>
+        <div class="rc-label">Earned coverage across Vogue, WWD, The Cut, Refinery29, Dazed, Highsnobiety, BoF, People, ABC News, Entertainment Weekly — every launch cycle, every market</div>
+      </div>
+    </div>
+
+    <div class="results-note fi">
+      Campaign metrics tell part of the story. The rest lives in outcomes that don't appear on a dashboard: retail partners who bought into the brand's new creative direction because the communications program gave them confidence; an internal organization that held together through a once-in-a-generation leadership transition; an investor-facing narrative that connected cultural momentum to commercial performance; and a crisis that receded without a retraction or a single material impact on the business. Those are communications results. They just require a different kind of attribution.
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════
+     LESSONS
+═════════════════════════ -->
+<section class="section">
+  <div class="section-inner">
+    <div class="s-label fi">07 — What This Work Taught Me</div>
+    <h2 class="s-title fi">Principles that shape<br>my practice today</h2>
+    <div class="lessons-grid fi">
+
+      <div class="lesson">
+        <div class="lesson-n">01</div>
+        <div class="lesson-title">Influencer Is Casting, Not Media Buying</div>
+        <div class="lesson-body">The most important insight from building the #mycalvins influencer program was that the best influencer relationships are talent relationships — and talent relationships, managed well, produce campaign-level results. When influencer partners started appearing in global paid campaigns and sitting front row at runway shows, it wasn't a surprise. It was a validation of how the program had been built from the beginning: not as a media buy, but as a creative investment with a long time horizon.</div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-n">02</div>
+        <div class="lesson-title">Corporate Comms Is Brand Strategy</div>
+        <div class="lesson-body">The investor-facing narrative, the internal alignment, the retail partner briefings — these are not administrative functions separate from the brand work. They are the infrastructure that makes brand work commercially durable. A campaign that generates 600 million social engagements but fails to give retail partners confidence, or fails to translate into a coherent PVH brand story, or fails to hold the internal organization through a major creative transition — that campaign has not fully delivered. The communications leader's job is to close every loop.</div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-n">03</div>
+        <div class="lesson-title">Legal and Communications Are the Same Function</div>
+        <div class="lesson-body">Working hand in hand with general counsel throughout this campaign confirmed a principle I now treat as non-negotiable: the most effective communications leaders understand the legal parameters they're operating within as clearly as they understand the brand ones. At the intersection of those two disciplines is where the most consequential decisions get made — and they need to be made in real time, not after sequential approvals.</div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-n">04</div>
+        <div class="lesson-title">Heritage Is Permission, Not Nostalgia</div>
+        <div class="lesson-body">The May 2016 crisis was resolved not by apologizing or retreating, but by understanding exactly what the brand's history had earned it the right to do. That kind of brand knowledge — granular, historically grounded, held with genuine conviction — is what separates communications leaders who can hold a position under pressure from those who default to reactive management. It is also what makes the brand stronger on the other side of a controversy than it was going in.</div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-n">05</div>
+        <div class="lesson-title">Being in the Room Changes the Quality of the Work</div>
+        <div class="lesson-body">Participating in creative discussions — even without leading the creative function — fundamentally changed the quality of every downstream decision I made. You cannot write a behind-the-scenes interview that generates press if you don't understand what the campaign is trying to say. You cannot brief a retail partner on the brand's direction if you only know the version of it that was approved for external communications. Embedded communications leadership consistently produces better outcomes than communications leadership that receives the work finished.</div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-n">06</div>
+        <div class="lesson-title">Scale Comes from Systems, Not Effort</div>
+        <div class="lesson-body">The global reach of the #mycalvins influencer program, the consistency of the earned media across three years and multiple campaign iterations, the coherence of the trade and retail communications through a major creative transition — none of that was the product of working harder. It was the product of building the right systems: the brief, the measurement framework, the relationship protocols, the feedback loops. Leaders who skip the architecture investment spend the rest of the campaign working against the grain of what they built.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════
+     CLOSING
+═════════════════════════ -->
+<section class="section" style="background:#080808;padding:80px 0;">
+  <div class="section-inner">
+    <div style="max-width:800px;">
+      <div class="s-label fi">Final Reflection</div>
+      <h2 class="s-title fi">What it meant to lead<br>this work from the inside</h2>
+      <p class="body fi">#mycalvins was already in motion when I arrived. What I brought to it was the infrastructure the campaign needed to reach its potential: a globally scaled influencer program with genuine strategic intent, talent relationships managed at the depth the work demanded, content that made those relationships press-worthy, an owned social strategy with a distinct brand voice, a corporate communications function that connected every campaign moment to the brand's commercial and investor narrative, and a crisis apparatus that was operational before it was needed. The measure of that contribution is not any single moment. It's that influencer partners became campaign talent. That retail partners and PVH investors had a consistent brand story through the most significant creative transition in the brand's history. That a crisis receded without a retraction. And that nearly a decade later, the model Calvin Klein helped pioneer — treating influencer as casting, not media — is now how the industry operates. At Calvin Klein, during these years, it was new.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-l">Alex Wagner · Calvin Klein · #MyCalvins</div>
+  <div class="footer-r">
+    Case Study · The New Currency<br>
+    Sources: Business of Fashion · WWD · Vogue · Refinery29 · W Magazine<br>
+    Highsnobiety · Dazed · Social Media Today · Fashionista · WGSN · PVH Corp.
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

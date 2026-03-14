@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Constellation Brands — Case Study | Alex Wagner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f7f5f0;
+    --off-white: #ede9e2;
+    --gray: #6b6b6b;
+    --rule: rgba(255,255,255,0.07);
+    --gold: #b8973a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--black); color: var(--white); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 55% 45%; overflow: hidden; }
+  .hero-left { display: flex; flex-direction: column; justify-content: flex-end; padding: 80px 64px; position: relative; z-index: 2; }
+  .hero-left::before { content: ''; position: absolute; bottom: 110px; left: 40px; width: 480px; height: 320px; background: radial-gradient(ellipse, rgba(184,151,58,0.07) 0%, transparent 68%); pointer-events: none; }
+  .hero-right { background: #0d0d0d; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; padding: 80px 60px; }
+  .hero-right::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px), repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px); z-index: 0; }
+  .hero-right-content { position: relative; z-index: 1; }
+  .eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 28px; opacity: 0; animation: fadeUp 0.8s ease 0.2s forwards; }
+  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(58px, 8.2vw, 118px); line-height: 0.9; letter-spacing: -0.01em; opacity: 0; animation: fadeUp 0.9s ease 0.35s forwards; }
+  .hero-title .gold { color: var(--gold); }
+  .hero-title .dim { color: rgba(247,245,240,0.18); }
+  .hero-sub { font-size: 13px; color: var(--gray); letter-spacing: 0.09em; text-transform: uppercase; margin-top: 28px; max-width: 520px; line-height: 1.8; opacity: 0; animation: fadeUp 0.9s ease 0.55s forwards; }
+  .hero-rule { width: 100%; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); margin: 36px 0; }
+  .hero-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; opacity: 0; animation: fadeUp 0.9s ease 0.75s forwards; }
+  .stat-box { border-top: 1px solid rgba(255,255,255,0.09); padding-top: 14px; }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 40px; color: var(--gold); line-height: 1; }
+  .stat-label { font-size: 10px; color: var(--gray); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 4px; line-height: 1.5; }
+  .landmark-list { display: flex; flex-direction: column; opacity: 0; animation: fadeUp 0.9s ease 0.9s forwards; }
+  .lm-item { display: grid; grid-template-columns: 76px 1fr; gap: 20px; align-items: start; padding: 20px 0; border-bottom: 1px solid var(--rule); }
+  .lm-item:first-child { border-top: 1px solid var(--rule); }
+  .lm-date { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gold); letter-spacing: 0.1em; padding-top: 2px; opacity: 0.75; }
+  .lm-text { font-size: 13px; color: rgba(247,245,240,0.52); line-height: 1.65; }
+  .lm-text strong { color: rgba(247,245,240,0.82); font-weight: 400; }
+
+  /* ACT DIVIDER */
+  .act-divider { background: var(--gold); padding: 22px 64px; display: flex; align-items: center; gap: 24px; }
+  .act-label { font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 0.35em; color: var(--black); white-space: nowrap; }
+  .act-rule { flex: 1; height: 1px; background: rgba(10,10,10,0.25); }
+  .act-date { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: rgba(10,10,10,0.6); }
+
+  /* ROLE BANNER */
+  .role-banner { background: #0e0e0e; border-top: 1px solid rgba(184,151,58,0.18); border-bottom: 1px solid rgba(184,151,58,0.18); padding: 52px 0; }
+  .role-inner { max-width: 1200px; margin: 0 auto; padding: 0 64px; display: grid; grid-template-columns: auto 1fr; gap: 64px; align-items: center; }
+  .role-id { border-left: 3px solid var(--gold); padding-left: 28px; }
+  .ri-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); opacity: 0.75; margin-bottom: 10px; }
+  .ri-name { font-family: 'Bebas Neue', sans-serif; font-size: 44px; line-height: 1; }
+  .ri-title { font-size: 13px; color: var(--gray); margin-top: 6px; }
+  .role-meta { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .rm-cell { padding: 0 36px; border-left: 1px solid var(--rule); }
+  .rm-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray); margin-bottom: 8px; }
+  .rm-value { font-size: 14px; color: rgba(247,245,240,0.68); line-height: 1.65; }
+
+  /* OVERVIEW */
+  .overview-strip { background: var(--off-white); padding: 72px 0; }
+  .overview-grid { max-width: 1200px; margin: 0 auto; padding: 0 64px; display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid #d4d0c9; }
+  .ov-cell { padding: 36px 32px; border-right: 1px solid #d4d0c9; }
+  .ov-cell:last-child { border-right: none; }
+  .ov-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #888; margin-bottom: 10px; }
+  .ov-value { font-size: 15px; color: #1a1a1a; line-height: 1.5; }
+
+  /* SECTIONS */
+  .section { padding: 96px 0; }
+  .section-inner { max-width: 1200px; margin: 0 auto; padding: 0 64px; }
+  .s-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); opacity: 0.8; margin-bottom: 18px; }
+  .s-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(38px, 5vw, 66px); line-height: 1; letter-spacing: -0.01em; margin-bottom: 32px; }
+  .body { font-size: 16px; line-height: 1.78; color: rgba(247,245,240,0.7); max-width: 700px; }
+  .body + .body { margin-top: 20px; }
+
+  /* TIMELINE */
+  .tl-section { background: #0d0d0d; }
+  .timeline { position: relative; margin-top: 56px; }
+  .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: linear-gradient(180deg, var(--gold) 0%, rgba(184,151,58,0.06) 100%); }
+  .tl-item { display: grid; grid-template-columns: 140px 1fr; gap: 40px; margin-bottom: 56px; padding-left: 28px; position: relative; }
+  .tl-item::before { content: ''; position: absolute; left: -4px; top: 7px; width: 9px; height: 9px; border-radius: 50%; background: var(--gold); border: 2px solid #0d0d0d; }
+  .tl-date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--gold); letter-spacing: 0.1em; padding-top: 3px; opacity: 0.75; }
+  .tl-content h4 { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 0.03em; margin-bottom: 10px; }
+  .tl-content p { font-size: 14px; color: rgba(247,245,240,0.58); line-height: 1.78; max-width: 640px; }
+  .tl-content p + p { margin-top: 12px; }
+
+  /* PULL QUOTE */
+  .pq-section { background: var(--off-white); padding: 96px 0; }
+  .pq-inner { max-width: 1200px; margin: 0 auto; padding: 0 64px; display: grid; grid-template-columns: 1fr 2.4fr; gap: 80px; align-items: center; }
+  .pq-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #888; }
+  .pq-text { font-family: 'Bebas Neue', sans-serif; font-size: clamp(28px, 3.6vw, 50px); line-height: 1.06; color: #1a1a1a; }
+  .pq-text em { color: #8a6a1a; font-style: normal; }
+
+  /* PILLARS */
+  .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); margin-top: 56px; }
+  .pillar { background: #0f0f0f; padding: 44px 38px; position: relative; overflow: hidden; transition: background 0.3s; }
+  .pillar:hover { background: #141414; }
+  .pillar::before { content: attr(data-n); font-family: 'Bebas Neue', sans-serif; font-size: 110px; color: rgba(184,151,58,0.04); position: absolute; top: -8px; right: 16px; line-height: 1; pointer-events: none; }
+  .pillar-icon { font-size: 22px; margin-bottom: 18px; }
+  .pillar-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 0.02em; margin-bottom: 12px; }
+  .pillar-body { font-size: 13.5px; color: rgba(247,245,240,0.56); line-height: 1.75; }
+  .pillar-tag { display: inline-block; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(184,151,58,0.28); padding: 4px 10px; margin-top: 18px; opacity: 0.85; }
+
+  /* DEAL CARDS */
+  .deal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--rule); margin-top: 56px; }
+  .deal-card { background: var(--black); padding: 40px 38px; position: relative; overflow: hidden; transition: background 0.3s; }
+  .deal-card:hover { background: #0e0e0e; }
+  .deal-card::after { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--gold); opacity: 0; transition: opacity 0.3s; }
+  .deal-card:hover::after { opacity: 1; }
+  .deal-type { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); opacity: 0.7; margin-bottom: 14px; }
+  .deal-title { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 0.02em; margin-bottom: 12px; line-height: 1; }
+  .deal-body { font-size: 14px; color: rgba(247,245,240,0.56); line-height: 1.75; }
+  .deal-meta { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--rule); font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray); letter-spacing: 0.1em; }
+
+  /* CALLOUT */
+  .callout { background: #0f0f0f; border: 1px solid rgba(184,151,58,0.2); padding: 48px; margin-top: 56px; }
+  .callout-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); opacity: 0.8; margin-bottom: 20px; }
+  .callout-title { font-family: 'Bebas Neue', sans-serif; font-size: 34px; letter-spacing: 0.02em; margin-bottom: 18px; }
+  .callout-body { font-size: 15px; color: rgba(247,245,240,0.63); line-height: 1.78; max-width: 820px; }
+
+  /* INVESTOR DAY */
+  .iday-section { background: #0a0a0a; }
+  .iday-hero { background: #0d0d0d; border: 1px solid rgba(184,151,58,0.15); padding: 60px; margin-top: 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+  .iday-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); opacity: 0.75; margin-bottom: 18px; }
+  .iday-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(34px, 4vw, 56px); line-height: 1; margin-bottom: 20px; }
+  .iday-body { font-size: 14px; color: rgba(247,245,240,0.6); line-height: 1.78; }
+  .iday-body + .iday-body { margin-top: 14px; }
+  .iday-meta { display: flex; flex-direction: column; gap: 20px; }
+  .iday-fact { border-left: 2px solid rgba(184,151,58,0.35); padding-left: 20px; }
+  .iday-fact-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); opacity: 0.7; margin-bottom: 6px; }
+  .iday-fact-value { font-size: 14px; color: rgba(247,245,240,0.65); line-height: 1.55; }
+
+  /* RESULTS */
+  .results-section { background: var(--off-white); }
+  .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid #d4d0c9; margin-top: 56px; }
+  .rc { padding: 44px 36px; border-right: 1px solid #d4d0c9; border-bottom: 1px solid #d4d0c9; }
+  .rc:nth-child(3n) { border-right: none; }
+  .rc:nth-last-child(-n+3) { border-bottom: none; }
+  .rc::after { content: ''; display: block; width: 36px; height: 2px; background: var(--gold); margin-top: 22px; opacity: 0.45; }
+  .rc-num { font-family: 'Bebas Neue', sans-serif; font-size: 56px; line-height: 1; color: #1a1a1a; }
+  .rc-label { font-size: 13px; color: #777; margin-top: 8px; line-height: 1.5; }
+  .results-note { margin-top: 44px; padding: 32px 40px; background: var(--black); font-size: 14px; line-height: 1.78; color: rgba(247,245,240,0.62); border-left: 3px solid var(--gold); }
+
+  /* LESSONS */
+  .lessons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 56px; background: var(--rule); }
+  .lesson { background: var(--black); padding: 44px 40px; transition: background 0.3s; }
+  .lesson:hover { background: #0d0d0d; }
+  .lesson-n { font-family: 'Bebas Neue', sans-serif; font-size: 72px; color: rgba(184,151,58,0.35); line-height: 1; margin-bottom: -8px; }
+  .lesson-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 0.02em; margin-bottom: 12px; }
+  .lesson-body { font-size: 14px; color: rgba(247,245,240,0.56); line-height: 1.78; }
+
+  /* CLOSING */
+  .closing { background: #080808; padding: 96px 0; }
+  blockquote.fq { border-left: 3px solid var(--gold); padding: 0 0 0 26px; font-style: italic; font-size: 17px; color: rgba(247,245,240,0.6); line-height: 1.75; margin: 32px 0; }
+  blockquote.fq cite { display: block; font-style: normal; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-top: 10px; opacity: 0.75; }
+
+  /* FOOTER */
+  footer { background: var(--black); border-top: 1px solid var(--rule); padding: 60px 64px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .footer-l { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 0.1em; color: rgba(247,245,240,0.08); }
+  .footer-r { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray); letter-spacing: 0.15em; text-align: right; line-height: 1.8; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+  .fi { opacity:0; transform:translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .fi.visible { opacity:1; transform:translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 960px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hero-left, footer { padding: 60px 32px; }
+    .section-inner, .role-inner, .pq-inner { padding: 0 32px; }
+    .overview-grid { grid-template-columns: 1fr 1fr; }
+    .ov-cell { border-bottom: 1px solid #d4d0c9; }
+    .pillars, .deal-grid, .lessons-grid { grid-template-columns: 1fr; }
+    .results-grid { grid-template-columns: 1fr; }
+    .rc { border-right: none; }
+    .role-inner { grid-template-columns: 1fr; gap: 40px; }
+    .role-meta { grid-template-columns: 1fr; gap: 20px; }
+    .rm-cell { border-left: none; border-top: 1px solid var(--rule); padding: 16px 0 0; }
+    .pq-inner { grid-template-columns: 1fr; gap: 20px; }
+    .iday-hero { grid-template-columns: 1fr; }
+    .act-divider { padding: 22px 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="eyebrow">Strategic Communications · Constellation Brands · Jan 2018 – Jun 2025</div>
+    <div class="hero-title">
+      <span class="dim">CONSTEL</span><br>
+      <span class="gold">LATION</span><br>
+      BRANDS
+    </div>
+    <div class="hero-sub">A five-year business transformation told through strategic communications — and the Investor Day that proved it to Wall Street</div>
+    <div class="hero-rule"></div>
+    <div class="hero-stats">
+      <div class="stat-box">
+        <div class="stat-num">~$810M</div>
+        <div class="stat-label">Gallo divestiture — largest M&amp;A transaction in wine and spirits industry history at the time</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">5 Yrs</div>
+        <div class="stat-label">First Constellation Investor Day in five years — held November 2, 2023 at the NYSE</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">+16.6%</div>
+        <div class="stat-label">STZ stock price increase across Q3–Q4 FY24 (Nov 2023 – Mar 2024) following the Investor Day</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">7.5 Yrs</div>
+        <div class="stat-label">VP Communications, Brand PR &amp; Brand Experience · January 2018 through June 2025</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-right-content">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(247,245,240,0.2);letter-spacing:0.25em;text-transform:uppercase;margin-bottom:28px;">Two Acts · One Story</div>
+      <div class="landmark-list">
+        <div class="lm-item">
+          <div class="lm-date">Jan 2018</div>
+          <div class="lm-text"><strong>Joins as VP Communications</strong> — Wine &amp; Spirits is a large, mainstream-weighted portfolio. The transformation strategy is being built internally. The communications infrastructure that will support it doesn't yet exist.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-date">2019</div>
+          <div class="lm-text"><strong>Transformation strategy goes public</strong> — The pivot from mainstream U.S. wholesale to a global, omni-channel, premium-focused portfolio is announced. Strategic communications campaign begins in earnest.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-date">2020</div>
+          <div class="lm-text"><strong>Empathy Wines acquisition</strong> — Industry first: a major beverage alcohol company acquires a digitally-native brand not for the wine, but for the DTC tech stack and team expertise to drive enterprise-wide digital transformation. Alex leads the announcement press campaign, landing CNBC, Yahoo Finance, Wine Spectator, The Drinks Business, and dozens of business and trade outlets in a single news cycle.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-date">2021</div>
+          <div class="lm-text"><strong>Gallo divestiture announced (~$810M)</strong> — The transformation's most consequential and most complex communications challenge begins. Announced in 2019, the deal would not close until 2021 — leaving brands, employees, and communities in a two-year period of significant uncertainty. Alex leads the full communications program from announcement through close.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-date">2022</div>
+          <div class="lm-text"><strong>Wine Group divestiture + Lingua Franca</strong> — Second divestiture tranche managed simultaneously with a luxury wine acquisition. The portfolio direction becomes unmistakable.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-date">Nov 2, 2023</div>
+          <div class="lm-text"><strong>Investor Day at the NYSE</strong> — First in five years. Alex leads Wine &amp; Spirits narrative development, executive presentation content, and full event production. STZ gains 16.6% across Q3 and Q4 FY24 — the five months following the event — reflecting sustained investor confidence, not just a day-of reaction.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROLE BANNER -->
+<section class="role-banner">
+  <div class="role-inner">
+    <div class="role-id">
+      <div class="ri-label">Case Study Author</div>
+      <div class="ri-name">Alex Wagner</div>
+      <div class="ri-title">VP Communications, Brand PR &amp; Brand Experience · Constellation Brands · Jan 2018 – Jun 2025</div>
+    </div>
+    <div class="role-meta">
+      <div class="rm-cell">
+        <div class="rm-label">Strategic Partnership</div>
+        <div class="rm-value">Embedded partner to Robert Hanson, President of Wine &amp; Spirits, and the Constellation Brands C-suite and IR function throughout the transformation and Investor Day</div>
+      </div>
+      <div class="rm-cell">
+        <div class="rm-label">Scope</div>
+        <div class="rm-value">Strategic communications, brand PR, brand experience, M&amp;A communications, investor narrative, executive communications, IR partnership, presentation development, event production</div>
+      </div>
+      <div class="rm-cell">
+        <div class="rm-label">Structure</div>
+        <div class="rm-value">Act I: the multi-year Wine &amp; Spirits transformation communications campaign (2018–2023). Act II: the 2023 Investor Day as its capstone moment</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section class="overview-strip">
+  <div class="overview-grid">
+    <div class="ov-cell">
+      <div class="ov-label">Company</div>
+      <div class="ov-value">Constellation Brands (NYSE: STZ)</div>
+    </div>
+    <div class="ov-cell">
+      <div class="ov-label">Engagement</div>
+      <div class="ov-value">January 2018 – June 2025</div>
+    </div>
+    <div class="ov-cell">
+      <div class="ov-label">Division Focus</div>
+      <div class="ov-value">Wine &amp; Spirits — a $2B+ business in transformation from mainstream to premium/high-end</div>
+    </div>
+    <div class="ov-cell">
+      <div class="ov-label">Investor Day</div>
+      <div class="ov-value">Nov 2, 2023 · NYSE · First in five years</div>
+    </div>
+  </div>
+</section>
+
+<!-- ACT I -->
+<div class="act-divider">
+  <div class="act-label">Act I — The Transformation</div>
+  <div class="act-rule"></div>
+  <div class="act-date">2018 — 2023</div>
+</div>
+
+<!-- CONTEXT -->
+<section class="section">
+  <div class="section-inner">
+    <div class="s-label fi">01 — Context &amp; Brief</div>
+    <h2 class="s-title fi">Making a five-year business<br>transformation legible</h2>
+    <p class="body fi">When Alex Wagner joined Constellation Brands as VP Communications, Brand PR &amp; Brand Experience in January 2018, the Wine &amp; Spirits division was a $2B+ business weighted heavily toward mainstream price points — a legacy of acquisitions that had built scale but not strategic coherence. Leadership was beginning to reckon with a fundamental market reality: the mainstream wine segment was under structural pressure, while premium and fine wine were growing. The path forward required not just a business transformation but a communications strategy that could hold the narrative together across years of divestiture, acquisition, and portfolio reshaping — without allowing investor uncertainty, trade confusion, or employee anxiety to fracture it at any point along the way. Getting all of those audiences to hold a coherent picture of what the division was becoming required a disciplined strategic communications program built in close partnership with Robert Hanson, President of Wine &amp; Spirits, the Constellation Brands C-suite, and the IR function.</p>
+
+    <div class="callout fi">
+      <div class="callout-eyebrow">The Core Challenge</div>
+      <div class="callout-title">Transformation Communications Is Its Own Discipline</div>
+      <div class="callout-body">A product launch has a defined moment. A rebrand has a reveal. A transformation communications campaign has neither — it is a sustained, multi-year effort to make an audience believe that a company in motion knows exactly where it is going, even as the path is being built in real time. Every divestiture risks being read as retreat. Every acquisition risks being read as distraction. The communications work has to hold the through-line — the strategic logic that connects each individual move into a coherent whole — while managing the distinct investor, trade, press, and employee narratives that each transaction generates.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="section tl-section">
+  <div class="section-inner">
+    <div class="s-label fi">02 — The Arc of the Work</div>
+    <h2 class="s-title fi">Five years of strategic moves,<br>one coherent narrative</h2>
+
+    <div class="timeline fi">
+
+      <div class="tl-item">
+        <div class="tl-date">2018 — 2019</div>
+        <div class="tl-content">
+          <h4>Building the Communications Infrastructure</h4>
+          <p>The first two years focused on building what didn't yet exist: a cohesive brand PR program for the Wine &amp; Spirits division's premium portfolio, deep press and trade media relationships, a consistent earned media voice across disparate brands including The Prisoner Wine Company, Robert Mondavi Winery, Kim Crawford, Meiomi, Woodbridge, High West Whiskey, SVEDKA Vodka, and Casa Noble Tequila, and the narrative groundwork for the transformation leadership was developing internally. The brands needed distinct, credible PR identities. The division needed a coherent story above the brand level. Both had to be in place before the communications demands escalated.</p>
+          <p>In 2019, Constellation publicly announced its strategic pivot for Wine &amp; Spirits: the shift from a domestic wholesale business serving predominantly mainstream price points to a global, omni-channel competitor focused on premium, fine wine, and craft spirits segments aligned with consumer premiumization trends. The master narrative that would carry across the next four-plus years — and ultimately anchor the Investor Day presentation — was established here. Also in 2019, Robert Hanson assumed operational leadership of the Wine &amp; Spirits division — bringing six years of Constellation board experience to the role — and the Gallo divestiture was announced. The two events were inseparable: new leadership with a clear mandate, and the transformation's most consequential transaction launched simultaneously. The communications program had to introduce a new operational leader and frame a record-setting divestiture as a single, coherent strategic statement.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">2020</div>
+        <div class="tl-content">
+          <h4>Empathy Wines &amp; Booker Vineyard — Two Weeks, Two Acquisitions, One Unmistakable Signal</h4>
+          <p>The acquisition of Empathy Wines on July 1, 2020 was not, at its core, a wine brand acquisition. It was a technology and talent acquisition — the first of its kind in the beverage alcohol industry. Constellation purchased Empathy specifically for its sophisticated DTC e-commerce tech stack and the expertise of its founding team to initiate and achieve an end-to-end digital transformation across the Wine &amp; Spirits division. The wine brand was the vessel. The capability was the point.</p>
+          <p>Empathy was co-founded by billionaire entrepreneur Gary Vaynerchuk — CEO of VaynerMedia and one of the most recognized digital marketing voices in the world — and his co-founders, both former VaynerMedia executives. Within a year of launch, the brand had sold 15,000 cases and built a subscription base of more than 2,000 customers, entirely through direct digital channels. Gary's co-founders joined Constellation full-time to run the DTC operation; Gary stayed on as a strategic consultant for more than a year post-acquisition, his expertise actively embedded in the transformation work.</p>
+          <p>The communications challenge was to land two simultaneous stories: the strategic rationale (this is a digital transformation investment, not a wine brand bet) and the cultural signal (Constellation is building for the next generation of premium wine consumers, not the last one). Alex led the announcement press campaign on July 1, 2020 — timed to Constellation's Q1 earnings release for maximum market impact — and drove coverage across CNBC, Yahoo Finance, Wine Spectator, The Drinks Business, CNN Money, Forbes, and a wide field of beverage alcohol trade press, all within a single news cycle. The DTC channel subsequently delivered 24% net sales growth — a result that became a pillar of the Investor Day narrative three years later.</p>
+          <p>Two weeks later, on July 16, Constellation announced a minority stake in Booker Vineyard — Eric Jensen's acclaimed Paso Robles estate and one of California's most respected super-luxury DTC producers, with wines ranging from $30 to $165 a bottle. The investment included an option for majority ownership. The back-to-back July announcements were not coincidental — together they signaled a division building simultaneously for digital infrastructure at scale and for credibility at the top of the market. Booker would go to full acquisition in 2021.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">2019 — 2021</div>
+        <div class="tl-content">
+          <h4>The Gallo Divestiture — Two Years, One Narrative to Hold</h4>
+          <p>The divestiture of the majority of Constellation's mainstream wine portfolio to E. &amp; J. Gallo Winery — announced in 2019 and ultimately closing in 2021 for approximately $810 million, the largest M&amp;A transaction in wine and spirits industry history at the time — was the single most consequential transaction of the transformation period and by far its most complex communications challenge. It was not a moment. It was a two-year communications program.</p>
+          <p>The gap between announcement and close introduced a category of difficulty that a standard deal announcement does not require: sustained, active management of deep uncertainty across multiple audiences for an extended period. Brands that had been part of Constellation's identity for years were in limbo. Employees whose roles were tied to those brands lived in that limbo for two years, uncertain about their futures. Trade partners needed consistent, credible information to manage their own planning. Communities where those brands had been meaningful employers and civic presences faced real disruption. None of those audiences could simply wait two years for resolution — each required its own communications cadence, honest and carefully calibrated, across the full duration of the process.</p>
+          <p>At the investor and press level, the communications architecture had to position a massive divestiture as strategic clarification, not retreat — while sustaining that frame across two full years of earnings calls, press inquiries, and trade coverage. The story that needed to land was not that Constellation was selling its wine business. It was that Constellation was editing it — deliberately, at scale, and with a clear picture of what it was building toward. Alex led the full communications program from the 2019 announcement through the 2021 close: announcement architecture, press and trade media strategy, employee communications, trade partner messaging, and the post-close investor narrative. Also in 2021, Constellation exercised its option to acquire Booker Vineyard in full, adding the Paso Robles estate, winery, tasting room, and full brand portfolio to the fine wine roster.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">2022</div>
+        <div class="tl-content">
+          <h4>Wine Group Divestiture + Lingua Franca — The Portfolio Comes Into Focus</h4>
+          <p>A second divestiture — mainstream and premium brands including Cooper &amp; Thief, The Dreaming Tree, and Charles Smith Wines sold to The Wine Group — continued the portfolio pruning. Simultaneously, the acquisition of Lingua Franca, an acclaimed Willamette Valley luxury wine brand, was announced. The communications challenge was now about preventing narrative fatigue: after multiple divestitures across multiple years, the risk was growing that press and investors would read the business as one that could not stop selling. The simultaneous management of a divestiture and an acquisition as a single, unified strategic narrative — sequenced and framed to reinforce rather than contradict each other — was the central communications work of 2022. The message: here is what is leaving, and here is exactly what is replacing it.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">2022 — 2023</div>
+        <div class="tl-content">
+          <h4>Toward the Investor Day — Crystallizing the Five-Year Arc</h4>
+          <p>By 2023, the shape of the destination was coming clearly into view. The mainstream portfolio had been substantially divested. The premium and fine wine and spirits portfolio — anchored by Schrader Cellars, Robert Mondavi Winery, The Prisoner Wine Company, Kim Crawford, Meiomi, High West Whiskey, and Casa Noble Tequila, with newer additions including Lingua Franca and Booker — was coherent and investable. The DTC channel was growing. Craft spirits was in place. The communications work shifted from transaction-by-transaction management toward Investor Day preparation: distilling five years of structural change into a narrative that analysts and investors could evaluate against clear metrics and a credible long-term thesis. The Wine &amp; Spirits case for the Investor Day had to do something the day-to-day program never had to do in a single moment: compress the entire arc into one room, one afternoon, and one argument.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SCOPE PILLARS -->
+<section class="section">
+  <div class="section-inner">
+    <div class="s-label fi">03 — Scope of the Transformation Communications Program</div>
+    <h2 class="s-title fi">Six disciplines across<br>five-plus years</h2>
+
+    <div class="pillars fi">
+      <div class="pillar" data-n="1">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Strategic Narrative Development</div>
+        <div class="pillar-body">The master narrative for the Wine &amp; Spirits transformation — built in partnership with Robert Hanson and the C-suite — had to frame five-plus years of structural change as a single coherent story that held across every audience and every transaction without losing the thread. Developing, maintaining, and adapting it as the business evolved was the foundational work of the entire engagement.</div>
+        <div class="pillar-tag">Narrative Strategy</div>
+      </div>
+      <div class="pillar" data-n="2">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">M&amp;A Communications Architecture</div>
+        <div class="pillar-body">Each transaction generated its own distinct communications challenge. The Gallo divestiture required framing a ~$810M exit as strategic clarification, not retreat. The Wine Group deal required sustaining confidence through a second major transaction. Each acquisition needed positioning as part of the build — not a distraction from the sell. Alex developed announcement architecture, press strategy, trade communications, and post-deal narrative in coordination with IR, legal, and senior leadership throughout the period.</div>
+        <div class="pillar-tag">M&amp;A Comms</div>
+      </div>
+      <div class="pillar" data-n="3">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Brand PR &amp; Brand Experience</div>
+        <div class="pillar-body">The portfolio — spanning Robert Mondavi Winery, The Prisoner Wine Company, Kim Crawford, Meiomi, Woodbridge, High West Whiskey, SVEDKA Vodka, Casa Noble Tequila, and others — required ongoing brand PR and brand experience programming that built consumer and trade awareness while reinforcing the division's premium repositioning story. Brand PR served double duty: building commercial equity and furnishing evidence for the division-level narrative.</div>
+        <div class="pillar-tag">Brand PR</div>
+      </div>
+      <div class="pillar" data-n="4">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">IR Partnership</div>
+        <div class="pillar-body">The transformation communications program was inseparable from investor relations. Every divestiture was a market event. Every acquisition was an analyst signal. The tone of earnings call language around Wine &amp; Spirits, the characterization of the division in quarterly materials, and the progress narrative told to the Street all had to cohere with the longer-arc transformation story. Alex worked embedded with the IR function throughout the engagement.</div>
+        <div class="pillar-tag">IR Partnership</div>
+      </div>
+      <div class="pillar" data-n="5">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Executive Communications</div>
+        <div class="pillar-body">Robert Hanson's public profile as a credible leader of the transformation was itself a communications asset. Industry conference appearances, trade press interviews, analyst briefings, and public statements all required executive communications support that positioned him and the C-suite as confident stewards of a strategy that was delivering. Message development, spokesperson preparation, and executive visibility strategy across investor, trade, and industry audiences were all part of the scope.</div>
+        <div class="pillar-tag">Executive Comms</div>
+      </div>
+      <div class="pillar" data-n="6">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Internal &amp; Change Management Communications</div>
+        <div class="pillar-body">Divestitures at this scale generate significant organizational anxiety. Employees whose brands are being sold need a narrative that is honest and respectful. Those in the retained business need confidence that their work has a future in it. Managing internal communications through every transaction — in parallel with the external story — required a distinct track that acknowledged the difficulty of change while holding the strategic clarity of the destination.</div>
+        <div class="pillar-tag">Internal Comms</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEAL CARDS -->
+<section class="section" style="background:#0d0d0d;padding-top:0;">
+  <div class="section-inner" style="padding-top:0;">
+    <div class="deal-grid fi">
+      <div class="deal-card">
+        <div class="deal-type">Divestiture · Announced 2019 · Closed 2021</div>
+        <div class="deal-title">Gallo Transaction</div>
+        <p class="deal-body">Mainstream wine and spirits portfolio — including Black Box, Clos du Bois, and others — divested to E. &amp; J. Gallo Winery in the largest M&amp;A transaction in wine and spirits industry history at the time. The deal's two-year gap between announcement and close created a sustained communications challenge distinct from any standard transaction: brands, employees, and communities in extended limbo; trade partners managing real uncertainty; and a transformation narrative that had to hold credibly across investor, press, and internal audiences for the full duration. Alex led the communications program from announcement through close — announcement architecture, press and trade strategy, employee communications, trade partner messaging, and the post-close investor narrative.</p>
+        <div class="deal-meta">~$810M · Announced 2019 · Closed 2021 · E. &amp; J. Gallo Winery · Largest M&amp;A transaction in wine industry history at the time</div>
+      </div>
+      <div class="deal-card">
+        <div class="deal-type">Divestiture · 2022</div>
+        <div class="deal-title">Wine Group Transaction</div>
+        <p class="deal-body">A second tranche of mainstream and premium brands — including Cooper &amp; Thief, The Dreaming Tree, and Charles Smith Wines — divested to The Wine Group. Communications challenge: managing a second major divestiture without allowing the narrative to read as perpetual retreat. The work required consistent investor and trade messaging tied directly to the defined end state of the portfolio — the premium, omni-channel destination that had been in market since 2019.</p>
+        <div class="deal-meta">The Wine Group · Second divestiture tranche · Portfolio focus tightens further</div>
+      </div>
+      <div class="deal-card">
+        <div class="deal-type">Acquisition · 2020</div>
+        <div class="deal-title">Empathy Wines</div>
+        <p class="deal-body">An industry first: Constellation acquires a digitally-native wine brand not for its label, but for its DTC tech stack and the capability of Gary Vaynerchuk and his co-founders to lead an end-to-end digital transformation of the Wine &amp; Spirits division. Gary's co-founders joined Constellation full-time; Gary stayed on as a strategic consultant for more than a year post-acquisition. Alex led the announcement press campaign on Q1 earnings day, July 1, 2020, landing CNBC, Yahoo Finance, Wine Spectator, The Drinks Business, CNN Money, Forbes, and broad beverage alcohol trade coverage in a single cycle. Three years later, the DTC channel it seeded delivered 24% net sales growth and anchored the Investor Day results narrative.</p>
+        <div class="deal-meta">DTC transformation acquisition · July 2020 · 24% DTC net sales growth by late 2023 · Industry first</div>
+      </div>
+      <div class="deal-card">
+        <div class="deal-type">Acquisition · 2020 (minority) · 2021 (full)</div>
+        <div class="deal-title">Booker Vineyard</div>
+        <p class="deal-body">Eric Jensen's acclaimed Paso Robles estate — one of California's most respected super-luxury DTC producers, with wines across the Booker, My Favorite Neighbor, and Harvey &amp; Harriet labels ranging from $30 to $165 a bottle. Constellation took a minority stake in July 2020, two weeks after the Empathy acquisition, with an option for majority ownership. The back-to-back July announcements were by design: digital infrastructure at scale plus credibility at the top of the market, communicated as a single strategic month. Constellation exercised its option and acquired Booker in full in November 2021, adding the estate, winery, and tasting room to the fine wine portfolio.</p>
+        <div class="deal-meta">Paso Robles super-luxury · Minority stake July 2020 · Full acquisition November 2021 · DTC fine wine</div>
+      </div>
+      <div class="deal-card">
+        <div class="deal-type">Acquisition · 2022</div>
+        <div class="deal-title">Lingua Franca</div>
+        <p class="deal-body">Acclaimed Willamette Valley luxury wine brand acquired — signaling the upper end of where the rebuilt portfolio competes. Managed in tandem with the Wine Group divestiture announcement, by deliberate communications sequencing: simultaneous exit and entry stories framed to reinforce each other. Out with mainstream, in with luxury. The juxtaposition made the transformation logic legible in a single news cycle.</p>
+        <div class="deal-meta">Willamette Valley luxury wine · Timed with Wine Group divestiture · Portfolio vision fully clarified</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PULL QUOTE -->
+<section class="pq-section">
+  <div class="pq-inner">
+    <div class="pq-label">The Strategic Insight</div>
+    <div class="pq-text fi">
+      Every transaction needed its own story.<br>
+      Every story had to serve<br>
+      <em>the same five-year arc.</em><br>
+      That coherence doesn't happen by accident.
+    </div>
+  </div>
+</section>
+
+<!-- ACT II -->
+<div class="act-divider">
+  <div class="act-label">Act II — The Investor Day Capstone</div>
+  <div class="act-rule"></div>
+  <div class="act-date">November 2, 2023 · New York Stock Exchange</div>
+</div>
+
+<!-- INVESTOR DAY -->
+<section class="section iday-section">
+  <div class="section-inner">
+    <div class="s-label fi">04 — The 2023 Investor Day</div>
+    <h2 class="s-title fi">Five years of transformation.<br>One afternoon to prove it.</h2>
+
+    <div class="iday-hero fi">
+      <div class="iday-left">
+        <div class="iday-eyebrow">November 2, 2023 · NYSE · New York City · 2:00 p.m. EDT</div>
+        <div class="iday-title">The First Constellation Brands Investor Day in Five Years</div>
+        <p class="iday-body">An Investor Day is not a product launch or a press event. It is an argument — presented to the analysts and institutional investors who most directly determine how the market values a company — that the strategy is credible, the management team is competent, and the long-term trajectory justifies confidence. Constellation Brands had not made that argument in a formal, dedicated public forum since 2018. In five years, the business had gone through a CEO transition, a global pandemic, two major divestitures, and multiple acquisitions — and the Wine &amp; Spirits division that showed up in 2023 looked materially different than the one Wall Street had last evaluated. For Wine &amp; Spirits specifically, the Investor Day was the first opportunity to present the full picture: the completed portfolio, the DTC growth story, the premium market thesis, and the management team's conviction in the path forward — all in one room, on one afternoon.</p>
+        <p class="iday-body">Alex led the Wine &amp; Spirits narrative development from the ground up — strategic framing of the division's transformation story, executive presentation content, script development for the division's leadership segment, and production of the full event in coordination with the IR team and the C-suite.</p>
+      </div>
+
+      <div class="iday-meta">
+        <div class="iday-fact">
+          <div class="iday-fact-label">Event</div>
+          <div class="iday-fact-value">Constellation Brands 2023 Investor Day — first in five years</div>
+        </div>
+        <div class="iday-fact">
+          <div class="iday-fact-label">Date &amp; Venue</div>
+          <div class="iday-fact-value">November 2, 2023 · 2:00 p.m. EDT<br>New York Stock Exchange · New York City</div>
+        </div>
+        <div class="iday-fact">
+          <div class="iday-fact-label">Audience</div>
+          <div class="iday-fact-value">Financial analysts and institutional investors — in-person by invitation; live webcast via ir.cbrands.com</div>
+        </div>
+        <div class="iday-fact">
+          <div class="iday-fact-label">CEO on Record</div>
+          <div class="iday-fact-value">Bill Newlands, President &amp; CEO: "We remain extremely optimistic about the future outlook of our business and look forward to sharing our plans to continue to deliver shareholder value."</div>
+        </div>
+        <div class="iday-fact">
+          <div class="iday-fact-label">Wine &amp; Spirits Segment</div>
+          <div class="iday-fact-value">Five-year transformation arc, premium portfolio positioning, DTC channel growth, and medium-term growth thesis — presented to the investment community in an integrated format for the first time</div>
+        </div>
+        <div class="iday-fact">
+          <div class="iday-fact-label">Outcome</div>
+          <div class="iday-fact-value">STZ +16.6% across Q3–Q4 FY24 (November 2023 – March 2024) — sustained investor confidence, not just a day-of reaction</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Investor Day scope -->
+    <div style="margin-top:56px;">
+      <div class="s-label fi">Wine &amp; Spirits Scope at Investor Day</div>
+      <div class="pillars fi" style="margin-top:28px;">
+        <div class="pillar" data-n="1">
+          <div class="pillar-icon">◈</div>
+          <div class="pillar-title">Investor Narrative Development</div>
+          <div class="pillar-body">Quarterly calls offer fragments of a story. An Investor Day demands the whole argument: the destination, the evidence of progress, and the management team's credibility to close it. Developing the Wine &amp; Spirits narrative — in partnership with Robert Hanson and the IR function — required distilling a complex, multi-year transformation into a presentation investors could evaluate in a single afternoon against clear metrics and a credible long-term thesis.</div>
+          <div class="pillar-tag">Narrative Dev</div>
+        </div>
+        <div class="pillar" data-n="2">
+          <div class="pillar-icon">◈</div>
+          <div class="pillar-title">Executive Presentation &amp; Script Development</div>
+          <div class="pillar-body">The Wine &amp; Spirits segment required executive presentation content and scripted remarks built to investor-grade standards: precise, evidence-supported, and delivered by leadership projecting command and confidence. Alex developed the presentation materials and executive script in close iteration with Robert Hanson, aligning content across the IR function, legal review, and the broader company presentation structure.</div>
+          <div class="pillar-tag">Exec Scripting</div>
+        </div>
+        <div class="pillar" data-n="3">
+          <div class="pillar-icon">◈</div>
+          <div class="pillar-title">C-Suite &amp; IR Coordination</div>
+          <div class="pillar-body">An Investor Day at this scale requires every communications and IR function to operate as a single coordinated unit. The Wine &amp; Spirits narrative had to cohere with the company-level story, the beer presentation, the financial guidance disclosures, and the CEO's framing for the day. Alex coordinated across Wine &amp; Spirits content, the IR team, legal review, and event production throughout the preparation period.</div>
+          <div class="pillar-tag">C-Suite Coordination</div>
+        </div>
+        <div class="pillar" data-n="4">
+          <div class="pillar-icon">◈</div>
+          <div class="pillar-title">Event Production</div>
+          <div class="pillar-body">Production of the Investor Day itself — venue management at the New York Stock Exchange, run-of-show, AV and webcast infrastructure for the live remote audience, materials distribution, press management, and the sequencing of a multi-hour event with the full senior leadership team — was part of the scope. The NYSE venue set a specific standard for the event's presentation quality: it had to match the confidence of the message it was carrying.</div>
+          <div class="pillar-tag">Event Production</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="section results-section">
+  <div class="section-inner">
+    <div class="s-label fi" style="color:#888;">05 — Results</div>
+    <h2 class="s-title fi" style="color:#1a1a1a;">The outcomes of five years of<br>sustained strategic communications</h2>
+
+    <div class="results-grid fi">
+      <div class="rc">
+        <div class="rc-num">~$810M</div>
+        <div class="rc-label">Gallo divestiture — the largest M&amp;A transaction in wine and spirits industry history at the time. Communications program positioned the record-setting exit as strategic clarity across investor and trade press</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">First</div>
+        <div class="rc-label">Constellation Investor Day in five years — held at the NYSE on November 2, 2023, with the Wine &amp; Spirits transformation presented to analysts and investors in an integrated format for the first time</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">+16.6%</div>
+        <div class="rc-label">STZ stock price increase across Q3–Q4 FY24 (November 2023 – March 2024) — reflecting renewed analyst and investor confidence in the company's strategic direction following the Investor Day</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">24%</div>
+        <div class="rc-label">DTC channel net sales growth (Q3 FY2024) — a result built in part through the brand PR and consumer narrative work that positioned DTC as a strategic priority from the Empathy acquisition onward</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">2×</div>
+        <div class="rc-label">Fine wine and craft spirits brands in the portfolio doubled during the transformation period — each addition supported by brand PR, acquisition communications, and integration into the division's strategic narrative</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">7.5 Yrs</div>
+        <div class="rc-label">Sustained narrative coherence across two major divestitures, multiple acquisitions, a global pandemic, and significant organizational change — without allowing the transformation thesis to fracture in investor or trade press at any point</div>
+      </div>
+    </div>
+
+    <div class="results-note fi">
+      <strong style="color:var(--white);display:block;margin-bottom:10px;">What the Investor Day represented:</strong>
+      STZ gained 16.6% across Q3 and Q4 FY24 — the five months following the Investor Day — reflecting sustained investor confidence, not just a day-of reaction. The conditions that made it land: a coherent portfolio story, a credible executive team, and an investor-grade narrative arc built from 2019 through 2023. The Investor Day was the moment of proof. The work described in this case study is what made the proof possible.
+    </div>
+  </div>
+</section>
+
+<!-- LESSONS -->
+<section class="section">
+  <div class="section-inner">
+    <div class="s-label fi">06 — What This Work Taught Me</div>
+    <h2 class="s-title fi">Principles from 7.5 years at<br>the center of a transformation</h2>
+
+    <div class="lessons-grid fi">
+      <div class="lesson">
+        <div class="lesson-n">01</div>
+        <div class="lesson-title">The Master Narrative Is the Most Valuable Asset in a Transformation</div>
+        <div class="lesson-body">The individual transactions each generated their own press cycle. But what gave all of them meaning was the master narrative: a company systematically repositioning a major division toward premium, high-growth segments aligned to where consumers were going. Without that narrative, each transaction gets read in isolation — and the story becomes one of perpetual change rather than deliberate destination. Building, maintaining, and protecting that master narrative across five years and multiple major transactions is the discipline that made all of it cohere. It does not maintain itself. It requires active, daily management.</div>
+      </div>
+      <div class="lesson">
+        <div class="lesson-n">02</div>
+        <div class="lesson-title">Communications and Strategy Must Be Built Together, Not in Sequence</div>
+        <div class="lesson-body">The most effective work in this engagement happened when communications was in the room as strategy was being shaped — not brought in afterward to explain decisions already made. Working as an embedded partner to Robert Hanson and the C-suite meant that the communications implications of each strategic decision were part of the decision-making process itself. The Investor Day narrative was not a translation of strategy into communications language. It was a co-creation, built from the same logic that drove the strategic choices over five years. That integration is the difference between communications that supports strategy and communications that shapes it.</div>
+      </div>
+      <div class="lesson">
+        <div class="lesson-n">03</div>
+        <div class="lesson-title">Divestitures Are Harder to Communicate Than Acquisitions</div>
+        <div class="lesson-body">Acquisitions have inherent narrative momentum — a company is building. Divestitures require communications work to actively construct the narrative of strategic intent, because the surface reading is always "they're selling things." The Gallo transaction was the clearest example: a ~$810M sale that had to communicate as the most confident moment in the transformation, not its most uncertain. Getting that framing right — and sustaining it across investor, trade, and press audiences simultaneously — required treating the divestiture announcement as a strategic statement, not a transaction announcement. The distinction is not semantic. It is the entire job.</div>
+      </div>
+      <div class="lesson">
+        <div class="lesson-n">04</div>
+        <div class="lesson-title">Investor Day Is a Test, Not a Moment</div>
+        <div class="lesson-body">The work that determined whether the 2023 Investor Day succeeded wasn't done on November 2, 2023. It was done in the preceding five years — in the consistency of the transformation narrative, the credibility of the executive team's public positioning, the quality of analyst relationships, and the coherence of the story investors had been hearing since 2019. An Investor Day is the test of whether sustained communications work has built genuine credibility. You cannot manufacture that in the weeks before the event. You either have it, because you built it, or you don't. The preparation matters enormously — but it is standing on top of something much larger.</div>
+      </div>
+      <div class="lesson">
+        <div class="lesson-n">05</div>
+        <div class="lesson-title">Brand PR and Investor Narrative Are Not Separate Programs</div>
+        <div class="lesson-body">One of the most important structural decisions in this engagement was treating brand PR and investor communications as two dimensions of the same program rather than independent workstreams. Earned media coverage of High West Whiskey, The Prisoner Wine Company, Robert Mondavi Winery, or Kim Crawford — in spirits publications, food media, wine press, and lifestyle outlets — was also evidence for the investor thesis that Constellation Wine &amp; Spirits competed meaningfully at premium. Brand equity and investor narrative reinforce each other, or they undercut each other. Managing them as a unified program, with awareness of how one affects the other, produced better results in both.</div>
+      </div>
+      <div class="lesson">
+        <div class="lesson-n">06</div>
+        <div class="lesson-title">Long Engagements Compound — Invest in the Infrastructure Early</div>
+        <div class="lesson-body">The value of a seven-year embedded engagement is not simply continuity — it is compounding institutional knowledge, relationship depth with press and analysts, and communications credibility that can only be built over time. The Investor Day narrative landed as well as it did in part because the people presenting it had been building it publicly for five years, and the media and analyst relationships that covered it had been cultivated across that same period. Communications infrastructure is a long-term investment. The returns show up at the moments of highest stakes — which is exactly when you need them most.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="closing">
+  <div class="section-inner">
+    <div style="max-width:820px;">
+      <div class="s-label fi">Final Reflection</div>
+      <h2 class="s-title fi">What 7.5 years inside<br>a transformation teaches you</h2>
+      <p class="body fi">Most communications engagements are measured in campaigns or quarters. This one was measured in years. The Wine &amp; Spirits transformation at Constellation Brands required a communications program with the same time horizon as the business strategy — one that could hold a narrative together across market cycles, organizational change, a global pandemic, and multiple major transactions, without losing investor, trade, or employee confidence at any point along the way.</p>
+      <p class="body fi" style="margin-top:20px;">The 2023 Investor Day was the clearest public measure of whether that program had worked. The stock lift, the analyst confidence, the bullish coverage of the company's long-term outlook — those outcomes were the result of five years of sustained work. They were also the result of a communications function that was treated as a strategic partner, not a support service: present when the strategy was built, not just when it needed to be explained.</p>
+      <blockquote class="fq fi">
+        "We are confident in our ability to deliver sustained, strong profitable growth through our strategy, which remains focused on continuing to drive our iconic high-end portfolio, consumer-led innovation, disciplined capital allocation, and advancing our ESG commitments."
+        <cite>— Bill Newlands, President &amp; CEO · Constellation Brands Investor Day · November 2, 2023</cite>
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-l">Alex Wagner · Constellation Brands · 2018–2025</div>
+  <div class="footer-r">
+    Case Study · The New Currency<br>
+    Sources: Constellation Brands IR · GlobeNewswire · Beverage Daily<br>
+    Wine Business · Wine Intelligence · Benzinga · Bloomberg
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

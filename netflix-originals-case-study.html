@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Netflix Originals — Case Study | Alex Wagner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f7f5f0;
+    --off-white: #ede9e2;
+    --gray: #6b6b6b;
+    --accent: #c8b89a;
+    --accent-dark: #8a6a4a;
+    --rule: rgba(255,255,255,0.07);
+    --red: #c0392b;
+    --red-dim: rgba(192,57,43,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ──────────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 55% 45%;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 80px 64px;
+    z-index: 2;
+    position: relative;
+  }
+
+  /* Subtle red glow behind the title */
+  .hero-left::before {
+    content: '';
+    position: absolute;
+    bottom: 120px;
+    left: 40px;
+    width: 400px;
+    height: 300px;
+    background: radial-gradient(ellipse, rgba(192,57,43,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-right {
+    background: #0d0d0d;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 80px 60px;
+  }
+
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px),
+      repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px);
+    z-index: 0;
+  }
+
+  .hero-right-content { position: relative; z-index: 1; }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 9.5vw, 130px);
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    color: var(--white);
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.35s forwards;
+  }
+
+  .hero-title .red { color: var(--red); }
+  .hero-title .dim { color: rgba(247,245,240,0.22); }
+
+  .hero-sub {
+    font-size: 13px;
+    color: var(--gray);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 28px;
+    max-width: 520px;
+    line-height: 1.8;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.55s forwards;
+  }
+
+  .rule { width: 100%; height: 1px; background: linear-gradient(90deg, var(--red), transparent); margin: 36px 0; }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.75s forwards;
+  }
+
+  .stat-box { border-top: 1px solid rgba(255,255,255,0.09); padding-top: 14px; }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 38px; color: var(--red); line-height: 1; }
+  .stat-label { font-size: 10px; color: var(--gray); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 4px; }
+
+  .landmark-list { display: flex; flex-direction: column; opacity: 0; animation: fadeUp 0.9s ease 0.9s forwards; }
+
+  .lm-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 20px;
+    align-items: start;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .lm-item:first-child { border-top: 1px solid var(--rule); }
+  .lm-date { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--red); letter-spacing: 0.1em; padding-top: 2px; opacity: 0.8; }
+  .lm-text { font-size: 13px; color: rgba(247,245,240,0.55); line-height: 1.6; }
+  .lm-text strong { color: rgba(247,245,240,0.85); font-weight: 400; }
+
+  /* ── VBREAK ────────────────────────────────────── */
+  .vbreak { height: 3px; background: linear-gradient(90deg, var(--red) 0%, transparent 50%); }
+
+  /* ── ROLE BANNER ───────────────────────────────── */
+  .role-banner {
+    background: #0e0e0e;
+    border-top: 1px solid rgba(192,57,43,0.2);
+    border-bottom: 1px solid rgba(192,57,43,0.2);
+    padding: 52px 0;
+  }
+
+  .role-inner { max-width: 1200px; margin: 0 auto; padding: 0 64px; display: grid; grid-template-columns: auto 1fr; gap: 64px; align-items: center; }
+  .role-id { border-left: 3px solid var(--red); padding-left: 28px; }
+  .ri-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--red); opacity: 0.8; margin-bottom: 10px; }
+  .ri-name { font-family: 'Bebas Neue', sans-serif; font-size: 44px; line-height: 1; }
+  .ri-title { font-size: 13px; color: var(--gray); margin-top: 6px; }
+  .role-meta { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .rm-cell { padding: 0 36px; border-left: 1px solid var(--rule); }
+  .rm-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray); margin-bottom: 8px; }
+  .rm-value { font-size: 14px; color: rgba(247,245,240,0.72); line-height: 1.6; }
+
+  /* ── OVERVIEW ──────────────────────────────────── */
+  .overview-strip { background: var(--off-white); padding: 72px 0; }
+  .overview-grid { max-width: 1200px; margin: 0 auto; padding: 0 64px; display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid #d4d0c9; }
+  .ov-cell { padding: 36px 32px; border-right: 1px solid #d4d0c9; }
+  .ov-cell:last-child { border-right: none; }
+  .ov-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #888; margin-bottom: 10px; }
+  .ov-value { font-size: 15px; color: #1a1a1a; line-height: 1.5; }
+
+  /* ── SECTIONS ──────────────────────────────────── */
+  .section { padding: 96px 0; }
+  .section-inner { max-width: 1200px; margin: 0 auto; padding: 0 64px; }
+  .s-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--red); opacity: 0.8; margin-bottom: 18px; }
+  .s-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 5vw, 68px); line-height: 1; letter-spacing: -0.01em; margin-bottom: 32px; }
+  .body { font-size: 16px; line-height: 1.78; color: rgba(247,245,240,0.72); max-width: 680px; }
+  .body + .body { margin-top: 20px; }
+
+  /* ── TIMELINE ──────────────────────────────────── */
+  .tl-section { background: #0d0d0d; }
+  .timeline { position: relative; margin-top: 56px; }
+  .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: linear-gradient(180deg, var(--red) 0%, rgba(192,57,43,0.08) 100%); }
+  .tl-item { display: grid; grid-template-columns: 148px 1fr; gap: 40px; margin-bottom: 56px; padding-left: 28px; position: relative; }
+  .tl-item::before { content: ''; position: absolute; left: -4px; top: 7px; width: 9px; height: 9px; border-radius: 50%; background: var(--red); border: 2px solid #0d0d0d; }
+  .tl-date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--red); letter-spacing: 0.1em; padding-top: 3px; opacity: 0.8; }
+  .tl-content h4 { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 0.03em; margin-bottom: 10px; }
+  .tl-content p { font-size: 14px; color: rgba(247,245,240,0.6); line-height: 1.75; max-width: 620px; }
+  .tl-content p + p { margin-top: 12px; }
+
+  /* ── PULL QUOTE ────────────────────────────────── */
+  .pq-section { background: var(--off-white); padding: 96px 0; }
+  .pq-inner { max-width: 1200px; margin: 0 auto; padding: 0 64px; display: grid; grid-template-columns: 1fr 2.2fr; gap: 80px; align-items: center; }
+  .pq-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #888; }
+  .pq-text { font-family: 'Bebas Neue', sans-serif; font-size: clamp(30px, 3.8vw, 52px); line-height: 1.06; color: #1a1a1a; }
+  .pq-text em { color: var(--red); font-style: normal; }
+
+  /* ── PILLARS ───────────────────────────────────── */
+  .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); margin-top: 56px; }
+  .pillar { background: #0f0f0f; padding: 44px 38px; position: relative; overflow: hidden; transition: background 0.3s; }
+  .pillar:hover { background: #141414; }
+  .pillar::before { content: attr(data-n); font-family: 'Bebas Neue', sans-serif; font-size: 110px; color: rgba(192,57,43,0.05); position: absolute; top: -8px; right: 16px; line-height: 1; pointer-events: none; }
+  .pillar-icon { font-size: 22px; margin-bottom: 18px; }
+  .pillar-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 0.03em; margin-bottom: 12px; }
+  .pillar-body { font-size: 13.5px; color: rgba(247,245,240,0.58); line-height: 1.72; }
+  .pillar-tag { display: inline-block; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--red); border: 1px solid rgba(192,57,43,0.3); padding: 4px 10px; margin-top: 18px; opacity: 0.85; }
+
+  /* ── SHOW CARDS ────────────────────────────────── */
+  .show-section { background: #0a0a0a; }
+  .show-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--rule); margin-top: 56px; }
+  .sc { background: var(--black); padding: 40px 36px; transition: background 0.3s; position: relative; overflow: hidden; }
+  .sc:hover { background: #0d0d0d; }
+  .sc::after { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--red); opacity: 0; transition: opacity 0.3s; }
+  .sc:hover::after { opacity: 1; }
+  .sc-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--red); opacity: 0.7; margin-bottom: 14px; }
+  .sc-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 0.02em; margin-bottom: 14px; line-height: 1; }
+  .sc-body { font-size: 14px; color: rgba(247,245,240,0.58); line-height: 1.75; }
+  .sc-meta { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--rule); font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray); letter-spacing: 0.1em; }
+
+  /* ── PRESS STRIP ───────────────────────────────── */
+  .press-strip { background: #0a0a0a; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 36px 0; }
+  .press-inner { max-width: 1200px; margin: 0 auto; padding: 0 64px; }
+  .press-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gray); margin-bottom: 20px; }
+  .press-logos { display: flex; flex-wrap: wrap; gap: 0; }
+  .press-item { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.12em; color: rgba(247,245,240,0.2); padding: 8px 28px 8px 0; border-right: 1px solid var(--rule); margin-right: 28px; margin-bottom: 12px; transition: color 0.3s; }
+  .press-item:hover { color: var(--red); }
+  .press-item:last-child { border-right: none; }
+
+  /* ── IMPACT CALLOUT ────────────────────────────── */
+  .diff-box { background: #0f0f0f; border: 1px solid rgba(192,57,43,0.2); padding: 48px; margin-top: 56px; }
+  .diff-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); opacity: 0.8; margin-bottom: 20px; }
+  .diff-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 0.02em; margin-bottom: 20px; }
+  .diff-body { font-size: 15px; color: rgba(247,245,240,0.65); line-height: 1.78; max-width: 780px; }
+
+  /* ── RESULTS ───────────────────────────────────── */
+  .results-section { background: var(--off-white); }
+  .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid #d4d0c9; margin-top: 56px; }
+  .rc { padding: 44px 36px; border-right: 1px solid #d4d0c9; border-bottom: 1px solid #d4d0c9; }
+  .rc:nth-child(3n) { border-right: none; }
+  .rc:nth-last-child(-n+3) { border-bottom: none; }
+  .rc::after { content: ''; display: block; width: 36px; height: 2px; background: var(--red); margin-top: 22px; opacity: 0.5; }
+  .rc-num { font-family: 'Bebas Neue', sans-serif; font-size: 58px; line-height: 1; color: #1a1a1a; }
+  .rc-label { font-size: 13px; color: #777; margin-top: 8px; line-height: 1.5; }
+  .results-note { margin-top: 44px; padding: 32px 40px; background: var(--black); font-size: 14px; line-height: 1.75; color: rgba(247,245,240,0.65); border-left: 3px solid var(--red); }
+
+  /* ── LESSONS ───────────────────────────────────── */
+  .lessons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 56px; background: var(--rule); }
+  .lesson { background: var(--black); padding: 44px 40px; transition: background 0.3s; }
+  .lesson:hover { background: #0d0d0d; }
+  .lesson-n { font-family: 'Bebas Neue', sans-serif; font-size: 72px; color: rgba(192,57,43,0.1); line-height: 1; margin-bottom: -8px; }
+  .lesson-title { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 0.02em; margin-bottom: 12px; }
+  .lesson-body { font-size: 14px; color: rgba(247,245,240,0.58); line-height: 1.75; }
+
+  blockquote.fq { border-left: 3px solid var(--red); padding: 0 0 0 26px; font-style: italic; font-size: 17px; color: rgba(247,245,240,0.62); line-height: 1.75; margin: 32px 0; opacity: 0.9; }
+  blockquote.fq cite { display: block; font-style: normal; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--red); margin-top: 10px; opacity: 0.8; }
+
+  /* ── FOOTER ────────────────────────────────────── */
+  footer { background: var(--black); border-top: 1px solid var(--rule); padding: 60px 64px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .footer-l { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 0.1em; color: rgba(247,245,240,0.1); }
+  .footer-r { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray); letter-spacing: 0.15em; text-align: right; line-height: 1.8; }
+
+  /* ── ANIMATIONS ────────────────────────────────── */
+  @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+  .fi { opacity:0; transform:translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .fi.visible { opacity:1; transform:translateY(0); }
+
+  /* ── RESPONSIVE ────────────────────────────────── */
+  @media (max-width: 960px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hero-left { padding: 60px 32px; }
+    .section-inner, .role-inner, .pq-inner, .press-inner { padding: 0 32px; }
+    .overview-grid { grid-template-columns: 1fr 1fr; }
+    .ov-cell { border-bottom: 1px solid #d4d0c9; }
+    .pillars, .show-grid { grid-template-columns: 1fr; }
+    .lessons-grid { grid-template-columns: 1fr; }
+    .results-grid { grid-template-columns: 1fr; }
+    .rc { border-right: none; }
+    .role-inner { grid-template-columns: 1fr; gap: 40px; }
+    .role-meta { grid-template-columns: 1fr; gap: 20px; }
+    .rm-cell { border-left: none; border-top: 1px solid var(--rule); padding: 16px 0 0; }
+    .pq-inner { grid-template-columns: 1fr; gap: 20px; }
+    footer { flex-direction: column; gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════
+     HERO
+════════════════════════════ -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="eyebrow">Earned Media &amp; PR · ID PR / Netflix · 2010–2012</div>
+    <div class="hero-title">
+      <span class="dim">NETFLIX</span><br>
+      <span class="red">ORIG</span><br>
+      INALS
+    </div>
+    <div class="hero-sub">
+      Architecting the earned media strategy and PR launch of Netflix Originals — the announcement that changed how the world watches television
+    </div>
+    <div class="rule"></div>
+    <div class="hero-stats">
+      <div class="stat-box">
+        <div class="stat-num">First</div>
+        <div class="stat-label">Streaming service to produce original scripted content at this scale</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">$100M+</div>
+        <div class="stat-label">Reported value of the House of Cards deal — Netflix's biggest bet in its history</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">9</div>
+        <div class="stat-label">Emmy nominations for House of Cards S1 — first ever for a streaming-only series</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">3M+</div>
+        <div class="stat-label">New subscribers added worldwide in Q1 2013 following House of Cards premiere</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-right-content">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(247,245,240,0.2);letter-spacing:0.25em;text-transform:uppercase;margin-bottom:28px;">Landmark Moments</div>
+      <div class="landmark-list">
+        <div class="lm-item">
+          <div class="lm-date">2010</div>
+          <div class="lm-text"><strong>Netflix account engagement begins</strong> — ID PR brought on as agency of record as Netflix navigates the transition from DVD-by-mail to streaming platform and eyes a new chapter.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-date">Mar 2011</div>
+          <div class="lm-text"><strong>Netflix Originals announcement</strong> — House of Cards deal breaks in Deadline as an exclusive. A streaming service outbids HBO and AMC for prestige content. Industry coverage is immediate and global.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-date">2011</div>
+          <div class="lm-text"><strong>First-wave originals pipeline publicized</strong> — Lilyhammer, House of Cards, Orange is the New Black, and others announced and positioned in press as a coherent originals strategy, not isolated acquisitions.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-date">Feb 2012</div>
+          <div class="lm-text"><strong>Lilyhammer premieres</strong> — the first Netflix Original to stream. Feb 6, 2012. All-episode binge model introduced. Press coverage frames it as the beginning of a new era in television.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-date">2012</div>
+          <div class="lm-text"><strong>Orange is the New Black greenlit</strong> — Jenji Kohan's series commissioned. Early earned media groundwork laid as part of the sustained originals narrative being built in press.</div>
+        </div>
+        <div class="lm-item">
+          <div class="lm-date">Feb 2013</div>
+          <div class="lm-text"><strong>House of Cards S1 drops</strong> — 9 Emmy nominations. Netflix stock jumps 70% in the week prior. The PR infrastructure built over two years absorbs the moment and extends it.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="vbreak"></div>
+
+<!-- ════════════════════════
+     ROLE BANNER
+════════════════════════════ -->
+<section class="role-banner">
+  <div class="role-inner">
+    <div class="role-id">
+      <div class="ri-label">Case Study Author &amp; Account Lead</div>
+      <div class="ri-name">Alex Wagner</div>
+      <div class="ri-title">Account Lead, Netflix · ID PR</div>
+    </div>
+    <div class="role-meta">
+      <div class="rm-cell">
+        <div class="rm-label">Scope of Work</div>
+        <div class="rm-value">Earned media strategy &amp; execution, announcement architecture, originals launch PR, show-level publicity, press narrative development, media relations across entertainment and business verticals</div>
+      </div>
+      <div class="rm-cell">
+        <div class="rm-label">Historic Context</div>
+        <div class="rm-value">Netflix's entry into original content was the single most consequential strategic announcement in the company's history at that point — and one of the most significant disruptions in television in a generation</div>
+      </div>
+      <div class="rm-cell">
+        <div class="rm-label">First-Wave Originals</div>
+        <div class="rm-value">Lilyhammer, House of Cards (Fincher / Spacey), Orange is the New Black (Jenji Kohan), and others — publicized as a coherent originals strategy from announcement through launch</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     OVERVIEW
+════════════════════════════ -->
+<section class="overview-strip">
+  <div class="overview-grid">
+    <div class="ov-cell">
+      <div class="ov-label">Client</div>
+      <div class="ov-value">Netflix (via ID PR)</div>
+    </div>
+    <div class="ov-cell">
+      <div class="ov-label">Engagement Span</div>
+      <div class="ov-value">2010 – 2012</div>
+    </div>
+    <div class="ov-cell">
+      <div class="ov-label">Focus</div>
+      <div class="ov-value">Earned media, announcement PR, originals launch strategy</div>
+    </div>
+    <div class="ov-cell">
+      <div class="ov-label">Scale</div>
+      <div class="ov-value">National — entertainment, business, tech, and culture press</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     THE BRIEF
+════════════════════════════ -->
+<section class="section">
+  <div class="section-inner">
+    <div class="s-label fi">01 — Context &amp; Brief</div>
+    <h2 class="s-title fi">The moment a streaming service<br>became a content company</h2>
+    <p class="body fi">In 2010, Netflix was a streaming platform that licensed other people's content. By 2012, it was something no one had a word for yet: a technology company that was also a television studio, releasing prestige drama at a scale that had cable networks, Hollywood studios, and legacy broadcasters simultaneously alarmed, dismissive, and — within months — in open imitation. The communications work that helped make that shift legible to the press, to the industry, and to the public is the story this case study tells.</p>
+    <p class="body fi">As account lead for Netflix at ID PR, I led the strategy and execution of the earned media program that brought the Netflix Originals announcement to market and publicized the first wave of original content. This was genuinely unprecedented territory — not just for Netflix, but for the entire entertainment industry. There was no playbook for how a streaming service announced it was becoming a content creator, because no streaming service had ever done it before. The announcement architecture, the press narrative, the show-level publicity strategy, and the sustained earned media program connecting the announcement to the first premieres all had to be built from scratch.</p>
+    <p class="body fi">The primary challenge was one of credibility. Netflix in early 2011 was a company navigating real turbulence — the Qwikster debacle had shaken subscriber confidence and rattled investors. The originals strategy was, in part, a repositioning play: proof that Netflix was not just a content delivery system but a creative force with the taste and the ambition to compete with HBO and AMC for prestige programming. Communicating that required an earned media strategy that treated the announcement not as a product launch but as an industry statement — one that needed to land with the same authority as a major studio acquisition or a network upfront.</p>
+    <blockquote class="fq fi">
+      "Part of our goal is to become like HBO faster than HBO can become Netflix."
+      <cite>— Joris Evers, Netflix Spokesman · CNN Money, 2013</cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     TIMELINE
+════════════════════════════ -->
+<section class="section tl-section">
+  <div class="section-inner">
+    <div class="s-label fi">02 — The Work, Phase by Phase</div>
+    <h2 class="s-title fi">From announcement architecture<br>to first-wave launch</h2>
+
+    <div class="timeline fi">
+
+      <div class="tl-item">
+        <div class="tl-date">2010</div>
+        <div class="tl-content">
+          <h4>Setting the Stage — Netflix at an Inflection Point</h4>
+          <p>When ID PR took on the Netflix account, the company was at a genuine inflection point. Streaming had overtaken DVD rental as the primary business, but the content library was expensive to license, increasingly contested by studios that saw Netflix as a threat, and increasingly difficult to differentiate from what competitors were building. The originals strategy was being developed internally; the PR infrastructure that would support its public announcement needed to be built alongside it — along with the media relationships across entertainment trade press, business media, and technology outlets that the announcement would depend on.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">March 2011</div>
+        <div class="tl-content">
+          <h4>The House of Cards Announcement — Architecting an Industry Statement</h4>
+          <p>The House of Cards announcement broke on March 15, 2011 — Deadline ran it as an exclusive, with Variety, ABC News, The Hollywood Reporter, and virtually every major entertainment and business outlet following within hours. Netflix had outbid HBO and AMC for the rights to a David Fincher–directed, Kevin Spacey–led political drama, committing to two full seasons sight unseen. The deal was reported at over $100 million. The industry's reaction was immediate: this was not a licensing deal. This was Netflix declaring itself a creative competitor.</p>
+          <p>My work on the announcement involved coordinating the earned media strategy around how and when the news moved — sequencing press outreach, managing the narrative framing across entertainment and business verticals simultaneously, and ensuring that coverage consistently told the same strategic story: that Netflix was entering original content not as an experiment but as a full commitment, with production partners and talent that signaled genuine creative ambition.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">2011</div>
+        <div class="tl-content">
+          <h4>Building the Originals Narrative — Lilyhammer, OITNB, and the Pipeline</h4>
+          <p>The House of Cards announcement was the loudest moment, but the sustained earned media work that followed was equally important. My role included publicizing the full first wave of Netflix Originals as a coherent programming strategy — not as isolated acquisitions — so that press coverage built a cumulative narrative about a company with a genuine creative point of view. Lilyhammer (starring Stevie Van Zandt of The Sopranos and Bruce Springsteen's E Street Band) was framed as proof of Netflix's willingness to take unconventional creative risks: a subtitled Norwegian mob comedy as the first thing a streaming service ever released exclusively. Orange is the New Black, in development under Jenji Kohan (creator of Weeds), was positioned in early trade press as further evidence of a programming identity defined by ambitious, character-driven storytelling rather than safe genre plays.</p>
+          <p>Throughout 2011, the earned media program also had to navigate the Qwikster crisis — the September 2011 announcement of a disastrous plan to split streaming and DVD into separate services, reversed within weeks after subscriber and investor backlash. The originals narrative had to remain credible through that turbulence, which required keeping the creative ambition story intact while the company was simultaneously under fire for operational missteps.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">February 2012</div>
+        <div class="tl-content">
+          <h4>Lilyhammer Premieres — The First Netflix Original Streams</h4>
+          <p>On February 6, 2012, Lilyhammer became the first Netflix Original to stream — all eight episodes available simultaneously, a release format that had never been applied to a scripted series before. The binge model was not just a product decision; it was a communications statement about what Netflix believed television could be. The earned media work framed the all-at-once release as a viewer-respecting innovation — a company treating its audience as adults capable of consuming stories at their own pace, rather than parceling content out to maximize appointment viewing. The premiere also marked the first simultaneous multi-country streaming release, spanning the US, Canada, Latin America, and later the UK and the Nordics — a global model that was itself a first worth building into the earned media narrative.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">2012</div>
+        <div class="tl-content">
+          <h4>Orange is the New Black — Laying the Earned Media Foundation</h4>
+          <p>Orange is the New Black was greenlit in 2012, with Jenji Kohan adapting Piper Kerman's memoir about a year spent in federal prison. The show wouldn't premiere until July 2013, but the early earned media groundwork — trade press positioning, narrative development, building press relationships with talent — was laid during my tenure. The communications challenge was distinct from House of Cards: where Fincher and Spacey provided immediate prestige credibility, OITNB needed a different framing — one that built the case for a women-led, racially diverse ensemble set in a federal prison as precisely the kind of ambitious television Netflix was willing to stake its emerging identity on.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     PULL QUOTE
+════════════════════════════ -->
+<section class="pq-section">
+  <div class="pq-inner">
+    <div class="pq-label">The Strategic Insight</div>
+    <div class="pq-text">
+      This wasn't a product launch.
+      <em>It was an industry statement.</em>
+      The communications work had to make the market believe it — before a single episode had aired.
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     SCOPE
+════════════════════════════ -->
+<section class="section">
+  <div class="section-inner">
+    <div class="s-label fi">03 — The Earned Media Strategy</div>
+    <h2 class="s-title fi">Five disciplines that made<br>the announcement land</h2>
+
+    <div class="pillars fi">
+
+      <div class="pillar" data-n="1">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Announcement Architecture</div>
+        <div class="pillar-body">The House of Cards announcement was the most consequential communications moment in Netflix's history to that point. Getting it right required careful sequencing — which outlet broke the story, how the narrative framing moved from trade press to business media to mainstream news, and how the announcement established the strategic logic of the originals play rather than simply reporting deal terms. The goal was not coverage of a transaction. It was coverage of a transformation.</div>
+        <div class="pillar-tag">Announcement Strategy</div>
+      </div>
+
+      <div class="pillar" data-n="2">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Narrative Development &amp; Framing</div>
+        <div class="pillar-body">The earned media strategy required a master narrative that could carry across a two-year period and multiple show launches without becoming repetitive or losing credibility. That narrative — Netflix as a creative force competing with premium cable on the terms of prestige, ambition, and creative freedom — had to be established at the announcement moment and then sustained through every subsequent press touchpoint: Lilyhammer, House of Cards, OITNB, and the binge-release model itself. Each show had its own press story; each also had to reinforce the same overarching brand narrative about what Netflix was becoming.</div>
+        <div class="pillar-tag">Narrative Strategy</div>
+      </div>
+
+      <div class="pillar" data-n="3">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Multi-Vertical Press Strategy</div>
+        <div class="pillar-body">The Netflix Originals story required simultaneous management across press verticals that rarely read the same story the same way: entertainment trades (Deadline, Variety, THR) covering the creative disruption angle; business and financial media (WSJ, CNN Money, Bloomberg) covering the strategic implications; technology press (Wired, TechCrunch) covering the streaming innovation; and mainstream outlets covering what it meant for audiences. Each vertical needed its own version of the story, coordinated to reinforce rather than contradict each other.</div>
+        <div class="pillar-tag">Press Strategy</div>
+      </div>
+
+      <div class="pillar" data-n="4">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Show-Level Publicity</div>
+        <div class="pillar-body">Beyond the company-level narrative, each first-wave original required its own earned media strategy: positioning the show in press, building anticipation with critics ahead of premiere, managing talent relationships and press access, and developing the story angles that would generate sustained coverage through and after launch. Lilyhammer, with its Norwegian setting and Sopranos pedigree, required a different press approach than House of Cards' political prestige or OITNB's women-led ensemble — each telling its own story while adding to the larger Netflix Originals narrative.</div>
+        <div class="pillar-tag">Show Publicity</div>
+      </div>
+
+      <div class="pillar" data-n="5">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Crisis Navigation</div>
+        <div class="pillar-body">The Qwikster debacle — announced September 2011, reversed within weeks after significant subscriber and investor backlash — landed in the middle of the originals narrative-building period. Netflix lost 800,000 subscribers and saw its stock collapse. The communications challenge was to keep the originals story alive and credible while the company was simultaneously navigating a self-inflicted crisis in a different part of the business. The originals strategy was, in part, the company's answer to that crisis — and managing both narratives simultaneously, without letting the crisis contaminate the creative story, required disciplined earned media management.</div>
+        <div class="pillar-tag">Crisis &amp; Continuity</div>
+      </div>
+
+      <div class="pillar" data-n="6">
+        <div class="pillar-icon">◈</div>
+        <div class="pillar-title">Media Relationship Infrastructure</div>
+        <div class="pillar-body">The speed and quality of coverage around the House of Cards announcement — Deadline exclusive, Variety and THR same day, ABC News and mainstream business press within 24 hours — was not an accident. It was the product of media relationships built before the news arrived. Entertainment PR at this level depends on journalist relationships that take time to build and require consistent, credible engagement to maintain. The investment in those relationships during the account's early period was what allowed the announcement to generate the coverage quality and velocity it did.</div>
+        <div class="pillar-tag">Media Relations</div>
+      </div>
+
+    </div>
+
+    <!-- Industry-first callout -->
+    <div class="diff-box fi">
+      <div class="diff-eyebrow">Industry First</div>
+      <div class="diff-title">The First Time a Streaming Service Became a Content Company</div>
+      <div class="diff-body">When Netflix announced House of Cards in March 2011, there was no comparable moment to reference — because nothing comparable had happened. A technology company, built on licensing and distribution, had outbid the most prestigious cable networks in the world for prestige scripted content. The communications work had to explain something the industry had never seen before, to an audience that was simultaneously skeptical, threatened, and genuinely uncertain about what it meant. Building the earned media strategy that made that announcement land as an industry transformation — rather than a novelty or a gamble — required working from a blank page.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     PRESS STRIP
+════════════════════════════ -->
+<div class="press-strip fi">
+  <div class="press-inner">
+    <div class="press-label">Earned Media Coverage — Announcement Through Launch</div>
+    <div class="press-logos">
+      <div class="press-item">Deadline</div>
+      <div class="press-item">Variety</div>
+      <div class="press-item">Hollywood Reporter</div>
+      <div class="press-item">ABC News</div>
+      <div class="press-item">CNN Money</div>
+      <div class="press-item">The Wall Street Journal</div>
+      <div class="press-item">Wired</div>
+      <div class="press-item">New York Times</div>
+      <div class="press-item">Bloomberg</div>
+      <div class="press-item">The Guardian</div>
+      <div class="press-item">TechCrunch</div>
+      <div class="press-item">Entertainment Weekly</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     SHOW CARDS
+════════════════════════════ -->
+<section class="section show-section">
+  <div class="section-inner">
+    <div class="s-label fi">04 — The First Wave</div>
+    <h2 class="s-title fi">Originals that changed<br>what television could be</h2>
+    <div class="show-grid fi">
+
+      <div class="sc">
+        <div class="sc-label">First Netflix Original to Stream</div>
+        <div class="sc-title">Lilyhammer</div>
+        <p class="sc-body">A Norwegian mob comedy starring Stevie Van Zandt — the E Street Band guitarist and Sopranos actor — as a New York mobster relocated to Lillehammer under witness protection. Unorthodox in every respect: subtitled, foreign-set, in a genre that typically meant gritty American prestige drama. The earned media framing positioned Netflix's willingness to take that risk as a creative statement — a company confident enough in its audience to lead with something that defied every convention of what a "safe" first original should be. All eight episodes at once. The binge model, introduced.</p>
+        <div class="sc-meta">Premiered Feb 6, 2012 · First multi-country simultaneous streaming release · Introduced episode-dump binge model</div>
+      </div>
+
+      <div class="sc">
+        <div class="sc-label">Netflix's First Prestige Drama</div>
+        <div class="sc-title">House of Cards</div>
+        <p class="sc-body">David Fincher. Kevin Spacey. Robin Wright. An American adaptation of the BBC political thriller, produced by Media Rights Capital with a reported commitment of $100 million for 26 episodes across two seasons — ordered without a pilot. When Netflix outbid HBO and AMC in March 2011, the announcement repositioned Netflix in a single news cycle. The earned media strategy had to sustain that repositioning across nearly two years — from announcement to premiere — maintaining press interest and critical anticipation for a show that wouldn't air until February 2013. Nine Emmy nominations. First streaming-only series to earn major Emmy recognition.</p>
+        <div class="sc-meta">Announced Mar 2011 · Premiered Feb 1, 2013 · 9 Emmy nominations, S1 · First streaming Emmy contender</div>
+      </div>
+
+      <div class="sc">
+        <div class="sc-label">Netflix's Defining Cultural Touchstone</div>
+        <div class="sc-title">Orange is the New Black</div>
+        <p class="sc-body">Jenji Kohan's adaptation of Piper Kerman's memoir — a women-led, racially diverse ensemble drama set in a federal prison — was greenlit in 2012, with early earned media groundwork laid during the ID PR engagement. The communications challenge was establishing OITNB's creative credibility in trade press before it had a trailer, a premiere date, or the audience awareness that would come with its July 2013 launch. The narrative built during this period — that Netflix was willing to commission the kind of ambitious, unconventional, character-driven television that legacy networks wouldn't greenlight — was the foundation on which OITNB's eventual cultural impact was built.</p>
+        <div class="sc-meta">Greenlit 2012 · Premiered Jul 11, 2013 · Became one of the defining cultural series of the decade</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     RESULTS
+════════════════════════════ -->
+<section class="section results-section">
+  <div class="section-inner">
+    <div class="s-label fi" style="color:#888;">05 — Results</div>
+    <h2 class="s-title fi" style="color:#1a1a1a;">The numbers behind<br>a new television era</h2>
+
+    <div class="results-grid fi">
+      <div class="rc">
+        <div class="rc-num">First</div>
+        <div class="rc-label">Streaming service to produce original scripted content and release it as a complete season — a model that became industry standard within five years</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">$100M+</div>
+        <div class="rc-label">Reported value of the House of Cards two-season commitment — then the largest bet in Netflix's history and widely covered as a watershed industry moment</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">9</div>
+        <div class="rc-label">Emmy nominations for House of Cards Season 1 — the first ever for an online-only streaming series, formally placing Netflix in the prestige TV conversation</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">3M+</div>
+        <div class="rc-label">New subscribers worldwide in Q1 2013, the quarter House of Cards premiered — confirming that original content drove subscriber growth</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">70%</div>
+        <div class="rc-label">Netflix stock increase in the week before House of Cards S1 premiere — from $14.17 to $24.22 — reflecting market confidence built in part through sustained press narrative</div>
+      </div>
+      <div class="rc">
+        <div class="rc-num">Global</div>
+        <div class="rc-label">Earned coverage across Deadline, Variety, THR, NYT, WSJ, ABC News, CNN Money, Bloomberg, Wired, Guardian — across entertainment, business, and tech verticals simultaneously</div>
+      </div>
+    </div>
+
+    <div class="results-note fi">
+      <strong style="color:var(--white);display:block;margin-bottom:10px;">What these numbers represent:</strong>
+      Netflix's entry into original content is now one of the most studied corporate pivots in media history. The Emmy nominations, the subscriber growth, the stock performance, the cultural staying power of House of Cards and Orange is the New Black — those outcomes belong to the creative talent, the content investment, and the business strategy. What the earned media work contributed was the credibility infrastructure that made the market believe in the transformation before the shows aired. Getting the press, the industry, and the public to treat the announcement as a genuine strategic statement — not a vanity project or an overreach — was the communications challenge.
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     LESSONS
+════════════════════════════ -->
+<section class="section">
+  <div class="section-inner">
+    <div class="s-label fi">06 — What This Work Taught Me</div>
+    <h2 class="s-title fi">Principles that shape<br>my practice today</h2>
+    <div class="lessons-grid fi">
+
+      <div class="lesson">
+        <div class="lesson-n">01</div>
+        <div class="lesson-title">Announcements Are Positioning, Not News</div>
+        <div class="lesson-body">The House of Cards announcement was, on one level, a deal memo: Netflix had acquired rights to a show. On the level that mattered, it was a declaration of intent — a company telling the world what it was becoming. Earned media strategy at its most consequential is not about generating coverage of facts. It is about shaping how those facts are interpreted. Getting the framing right — transformation, not transaction — was the entire job. That distinction has defined how I approach announcement strategy in every engagement since.</div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-n">02</div>
+        <div class="lesson-title">Build the Infrastructure Before the Moment Arrives</div>
+        <div class="lesson-body">The speed and reach of the coverage on March 15, 2011 — Deadline exclusive, Variety and THR same-day, ABC News and mainstream business press within 24 hours — was the product of media relationships built in the preceding year. Earned media infrastructure is not a tool you build when you need it. It is a long-term investment that pays off when the moment comes. The quality of the House of Cards announcement coverage was inseparable from the quality of the press relationships that had been developed before anyone knew what the announcement would be.</div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-n">03</div>
+        <div class="lesson-title">A Portfolio of Stories Needs a Master Narrative</div>
+        <div class="lesson-body">Lilyhammer, House of Cards, and Orange is the New Black are three completely different shows with three completely different press stories. The earned media challenge was ensuring that coverage of each one also added to a cumulative narrative about what Netflix was becoming as a creative force. Without that master narrative, each show would have generated its own discrete press cycle. With it, every premiere reinforced the same underlying story about ambition, creative freedom, and the transformation of television. Sustained narrative coherence across multiple activations is a discipline that most communications programs don't invest in. It is also what separates campaigns that generate coverage from campaigns that build reputations.</div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-n">04</div>
+        <div class="lesson-title">Multi-Vertical Coordination Is a Distinct Skill</div>
+        <div class="lesson-body">Entertainment trades, business press, technology media, and mainstream outlets don't read the same story the same way. Netflix's originals announcement had to simultaneously land as a creative disruption (for Variety and THR), a strategic transformation (for WSJ and Bloomberg), a technology story (for Wired and TechCrunch), and a cultural moment (for mainstream audiences). Sequencing those verticals, tailoring the framing without contradicting the core narrative, and managing the timing so each press cycle reinforced rather than diluted the others — that is a coordination problem that requires deliberate strategy, not just broad distribution.</div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-n">05</div>
+        <div class="lesson-title">Crisis and Narrative Can Run Simultaneously</div>
+        <div class="lesson-body">The Qwikster debacle hit in September 2011 — directly in the middle of the originals narrative-building period. Managing both simultaneously required treating them as distinct stories with distinct press audiences, avoiding any narrative bleed that would have allowed operational criticism to contaminate the creative credibility story. The discipline of maintaining two parallel press narratives — holding the originals story intact while the company managed a genuine crisis in a different part of the business — is one of the more complex communications challenges I've navigated, and it reinforced a principle I return to constantly: compartmentalization is a communications skill, not an evasion.</div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-n">06</div>
+        <div class="lesson-title">First-Mover Stories Require Explanatory Architecture</div>
+        <div class="lesson-body">When there is no precedent for what a company is doing, the communications work has to do more than announce — it has to explain. Netflix was the first streaming service to produce original scripted content at this scale. There was no frame of reference for press, industry observers, or audiences to use when interpreting what that meant. Building the explanatory architecture — the analogies, the context, the competitive framing, the long-view narrative — was as important as the announcement itself. First-mover communications is its own discipline, and it requires a level of narrative construction that established categories never need.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     CLOSING
+════════════════════════════ -->
+<section class="section" style="background:#080808;padding:80px 0;">
+  <div class="section-inner">
+    <div style="max-width:800px;">
+      <div class="s-label fi">Final Reflection</div>
+      <h2 class="s-title fi">What it meant to work on<br>this from the inside</h2>
+      <p class="body fi">In 2011, nobody knew what Netflix Originals was going to become. The press was skeptical. The industry was threatened. Investors were uncertain. The company had just spent several months in self-inflicted crisis. The communications work in this period was not the work of amplifying an obvious success — it was the work of building credibility for an unproven bet, on a blank page, in real time. House of Cards and Orange is the New Black are now canonical. The binge-release model is the standard. The idea that a streaming service could win Emmys and compete with HBO is the baseline expectation. None of that was true in 2011. Helping build the earned media infrastructure that made the market believe it before any of it had been proven is the kind of communications work that only looks easy in retrospect — and the standard I bring to every engagement since.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     FOOTER
+════════════════════════════ -->
+<footer>
+  <div class="footer-l">Alex Wagner · Netflix Originals · ID PR</div>
+  <div class="footer-r">
+    Case Study · The New Currency<br>
+    Sources: Deadline · Variety · Hollywood Reporter · IndieWire · CNN Money<br>
+    ABC News · Wikipedia · Collider · The Hustle · History.com
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
